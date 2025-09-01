@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+html, body, #root {
+  height: 100%;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 3px;
+}
+.custom-scroll {
+  scrollbar-width: thin;    /* Firefox */
+  scrollbar-color: #bdbdbd transparent;
+}
