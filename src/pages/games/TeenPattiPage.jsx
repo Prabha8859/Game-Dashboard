@@ -598,7 +598,7 @@ const TeenPattiGameTable = () => {
       </div> */}
 
       {/* Main Table */}
-      <div className="bg-white rounded-xl shadow-lg overflow-x-auto max-w-[940px] border border-gray-200">
+      <div className="bg-white rounded-xl shadow-lg overflow-x-auto max-w-[900px] border border-gray-200">
         <div className="p-6 border-b border-gray-200 bg-white">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <h2 className="text-xl font-bold text-gray-900">Live Teen Patti Games Management</h2>

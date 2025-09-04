@@ -396,7 +396,7 @@ const LudoGameTable = () => {
                       </button>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  {/* <td className="px-6 py-4 whitespace-nowrap">
   <div className="text-sm font-bold text-gray-900">{game.id}</div>
   <div className="text-sm text-gray-500">{game.gameId}</div>
   <div className="text-xs text-gray-400 flex items-center gap-1">
@@ -406,7 +406,7 @@ const LudoGameTable = () => {
   <div className="text-xs text-blue-500 mt-1">
     ⏱ Duration: {calculateDuration(game.createdAt, game.status)}
   </div>
-</td>
+</td> */}
 
                 </tr>
               ))}

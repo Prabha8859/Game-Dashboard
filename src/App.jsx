@@ -24,19 +24,25 @@ import ClosedTickets from "./pages/ClosedTickets";
 import DailyReport from "./pages/DailyReport";
 import MonthlyReport from "./pages/MonthlyReport";
 
+// 🎮 Game pages
 import LudoGame from "./pages/games/LudoPage";
 import JackpotGame from "./pages/games/Jackpotpage";
 import MinesGame from "./pages/games/MinesPage";
 import TeenPattiGame from "./pages/games/TeenPattiPage";
-// import SlotsGame from "./pages/SlotsGame";
+import LotteryPage from "./pages/games/Lotterypage" ;
+
+
+// Import Lottery pages
+import AllLottery from "./pages/games/lottery-control/LotterySettingsPage";
+import ActiveLottery from "./pages/games/lottery-control/LotteryUserControlsPage";
+import LotteryResults from "./pages/games/lottery-control/LotteryUserDataPage";
 
 
 export default function App() {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Default: false to show login first
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isProfileModalOpen,setIsProfileModalOpen] = useState(false);
   const [activeProfileSection, setActiveProfileSection] = useState("profile");
 
   useEffect(() => {
@@ -49,26 +55,22 @@ export default function App() {
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  // ✅ Login and Logout handlers
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
-    setIsLoggedIn(false); // ✅ Fix: Should reset to false
+    setIsLoggedIn(false);
     setIsProfileModalOpen(false);
     setSelectedPage("dashboard");
   };
 
-  // ✅ Open profile modal with section
   const handleProfileClick = (section) => {
     setActiveProfileSection(section);
     setIsProfileModalOpen(true);
   };
 
-  // ✅ Show Login Page if not logged in
-  if (!isLoggedIn) {
-    return <LoginPage onLogin={handleLogin} isDarkMode={isDarkMode} />;
-  }
+  // if (!isLoggedIn) {
+  //   return <LoginPage onLogin={handleLogin} isDarkMode={isDarkMode} />;
+  // }
 
-  // ✅ Render main dashboard content based on selectedPage
   const renderContent = () => {
     switch (selectedPage) {
       case "dashboard":
@@ -107,18 +109,27 @@ export default function App() {
         return <DailyReport isDarkMode={isDarkMode} />;
       case "monthlyReport":
         return <MonthlyReport isDarkMode={isDarkMode} />;
-      // Add game pages:
-    case "ludo":
-      return <LudoGame isDarkMode={isDarkMode} />;
-    case "jackpot":
-      return <JackpotGame isDarkMode={isDarkMode} />;
-    case "mines":
-      return <MinesGame isDarkMode={isDarkMode} />;
-    case "teenPatti":
-      return <TeenPattiGame isDarkMode={isDarkMode} />;
-    // case "slots":
-    //   return <SlotsGame isDarkMode={isDarkMode} />;
-      
+
+      // 🎮 Game pages
+      case "ludo":
+        return <LudoGame isDarkMode={isDarkMode} />;
+      case "jackpot":
+        return <JackpotGame isDarkMode={isDarkMode} />;
+      case "mines":
+        return <MinesGame isDarkMode={isDarkMode} />;
+      case "teenPatti":
+        return <TeenPattiGame isDarkMode={isDarkMode} />;
+      case "lottery":
+        return <LotteryPage isDarkMode={isDarkMode} />;
+
+        // Lottery submenu
+    case "allLottery":
+      return <AllLottery isDarkMode={isDarkMode} />;
+    case "activeLottery":
+      return <ActiveLottery isDarkMode={isDarkMode} />;
+    case "Resultslottery":
+      return <LotteryResults isDarkMode={isDarkMode} />; 
+
       default:
         return <Dashboard isDarkMode={isDarkMode} />;
     }
@@ -136,18 +147,16 @@ export default function App() {
         isDarkMode={isDarkMode}
       />
 
-      {/* Main Content Area */}
       <div className="flex flex-col flex-1">
         <Header
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
-          onLogout={handleLogout} // ✅ Works now
+          onLogout={handleLogout}
           onProfileClick={handleProfileClick}
         />
         <div className="flex-1 p-6 overflow-y-auto">{renderContent()}</div>
       </div>
 
-      {/* Profile Modal */}
       <ProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}

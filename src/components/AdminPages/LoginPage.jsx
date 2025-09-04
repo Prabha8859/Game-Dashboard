@@ -109,15 +109,15 @@ const LoginPage = ({ onLogin }) => {
     showLoading();
     setTimeout(() => {
       hideLoading();
-      if (username === "prabha@admin.com" && password === "admin123") {
+      if (username === "p" && password === "a") {
         setErrors({ username: "", password: "" });
         showSuccessModal();
       } else {
         // Set error messages for invalid credentials
-        if (username !== "prabha@admin.com") {
+        if (username !== "p") {
           newErrors.username = "Invalid username! Use prabha@admin.com";
         }
-        if (password !== "admin123") {
+        if (password !== "a") {
           newErrors.password = "Invalid password! Use admin123";
         }
         setErrors(newErrors);

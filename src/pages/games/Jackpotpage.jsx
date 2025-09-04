@@ -286,7 +286,7 @@ const JackpotGameTable = () => {
 
 
       {/* Main Table */}
-      <div className="bg-white rounded-xl shadow-lg overflow-x-auto border border-gray-200 max-w-[161vh] overflow-w-auto">
+      <div className="bg-white rounded-xl shadow-lg overflow-x-auto border border-gray-200 max-w-[155vh] overflow-w-auto">
         <div className="p-4 border-b border-gray-200 bg-white">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <h2 className="text-xl font-bold text-gray-900">Live Jackpot Games Management</h2>
