@@ -53,6 +53,20 @@ const LotteryAdminDashboard = () => {
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [winnersHistory, setWinnersHistory] = useState([]);
   
+  // Manual Winner Selection State
+  const [manualWinners, setManualWinners] = useState([]);
+  const [manualWinnerForm, setManualWinnerForm] = useState({
+    position: '1st',
+    playerName: '',
+    playerId: '',
+    ticketId: '',
+    ticketNumber: '',
+    prizeAmount: '',
+    lotteryCode: '',
+    city: ''
+  });
+  const [showManualWinnerModal, setShowManualWinnerModal] = useState(false);
+  
   // Countdown State
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -151,6 +165,50 @@ const LotteryAdminDashboard = () => {
       }
     ];
     setWinnersHistory(sampleWinners);
+
+    // Load sample manual winners
+    const sampleManualWinners = [
+      {
+        id: 1,
+        position: '1st',
+        playerName: 'Rohit Sharma',
+        playerId: 'PL001',
+        ticketId: 'T001',
+        ticketNumber: '1E100',
+        prizeAmount: 100000,
+        lotteryCode: 'DW2025001',
+        city: 'Mumbai',
+        createdDate: '2024-11-01',
+        status: 'announced'
+      },
+      {
+        id: 2,
+        position: '2nd',
+        playerName: 'Virat Kohli',
+        playerId: 'PL002',
+        ticketId: 'T002',
+        ticketNumber: '1E200',
+        prizeAmount: 50000,
+        lotteryCode: 'DW2025001',
+        city: 'Delhi',
+        createdDate: '2024-11-01',
+        status: 'announced'
+      },
+      {
+        id: 3,
+        position: '3rd',
+        playerName: 'MS Dhoni',
+        playerId: 'PL003',
+        ticketId: 'T003',
+        ticketNumber: '1E300',
+        prizeAmount: 25000,
+        lotteryCode: 'DW2025001',
+        city: 'Chennai',
+        createdDate: '2024-11-01',
+        status: 'announced'
+      }
+    ];
+    setManualWinners(sampleManualWinners);
   }, []);
 
   // Countdown Timer Effect
@@ -351,6 +409,53 @@ const LotteryAdminDashboard = () => {
     setSelectedLotteryForWinner('');
   };
 
+  // Manual Winner Functions
+  const addManualWinner = () => {
+    const { position, playerName, playerId, ticketId, ticketNumber, prizeAmount, lotteryCode, city } = manualWinnerForm;
+    
+    if (!playerName || !playerId || !ticketNumber || !prizeAmount || !lotteryCode) {
+      setMessage('❌ Please fill all required fields');
+      return;
+    }
+
+    const newManualWinner = {
+      id: manualWinners.length + 1,
+      position,
+      playerName,
+      playerId,
+      ticketId: ticketId || `T${Date.now().toString().slice(-6)}`,
+      ticketNumber,
+      prizeAmount: parseFloat(prizeAmount),
+      lotteryCode,
+      city: city || 'Mumbai',
+      createdDate: new Date().toISOString().split('T')[0],
+      status: 'announced'
+    };
+
+    setManualWinners(prev => [newManualWinner, ...prev]);
+    setMessage(`🎉 Manual winner added! ${position} place - ${playerName} wins ₹${parseFloat(prizeAmount).toLocaleString()}!`);
+    setShowManualWinnerModal(false);
+    
+    // Reset form
+    setManualWinnerForm({
+      position: '1st',
+      playerName: '',
+      playerId: '',
+      ticketId: '',
+      ticketNumber: '',
+      prizeAmount: '',
+      lotteryCode: '',
+      city: ''
+    });
+  };
+
+  const deleteManualWinner = (winnerId) => {
+    if (window.confirm('Are you sure you want to delete this winner?')) {
+      setManualWinners(prev => prev.filter(winner => winner.id !== winnerId));
+      setMessage('🗑️ Manual winner deleted successfully!');
+    }
+  };
+
   // Ticket Management Functions
   const updateTicketStatus = (ticketId, newStatus, buyer = '') => {
     setTickets(prev => prev.map(ticket => 
@@ -442,6 +547,10 @@ const LotteryAdminDashboard = () => {
   const handleInputChange = (field, value) => {
     setSettings(prev => ({ ...prev, [field]: value }));
     setMessage('');
+  };
+
+  const handleManualWinnerFormChange = (field, value) => {
+    setManualWinnerForm(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -1140,7 +1249,9 @@ const LotteryAdminDashboard = () => {
 
         {/* Winner Control Tab */}
         {activeTab === 'winner' && (
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto space-y-8">
+            
+            {/* Top Row - Winner Selection and Winners History */}
             <div className="grid lg:grid-cols-2 gap-8">
               
               {/* Left Column - Winner Selection */}
@@ -1270,59 +1381,105 @@ const LotteryAdminDashboard = () => {
               </div>
             </div>
 
-            {/* Winners Statistics */}
-            {winnersHistory.length > 0 && (
-              <div className="mt-8 bg-white rounded-3xl shadow-2xl p-8 border">
-                <div className="flex items-center mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-3">
-                    <BarChart3 className="w-5 h-5 text-white" />
+            {/* Manual Winner Selection Section */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 border">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-red-400 to-pink-500 rounded-xl flex items-center justify-center mr-3">
+                    <Star className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-800">Winners Statistics</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">Manual Winner Selection</h2>
                 </div>
-
-                <div className="grid md:grid-cols-4 gap-6">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-blue-100">Total Winners</p>
-                        <p className="text-3xl font-bold">{winnersHistory.length}</p>
-                      </div>
-                      <Users className="w-8 h-8 text-blue-200" />
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-green-100">Total Distributed</p>
-                        <p className="text-2xl font-bold">₹{winnersHistory.reduce((sum, w) => sum + w.prizeAmount, 0).toLocaleString()}</p>
-                      </div>
-                      <DollarSign className="w-8 h-8 text-green-200" />
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-orange-100">Paid Winners</p>
-                        <p className="text-3xl font-bold">{winnersHistory.filter(w => w.status === 'paid').length}</p>
-                      </div>
-                      <CheckCircle className="w-8 h-8 text-orange-200" />
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-purple-100">Pending Payment</p>
-                        <p className="text-3xl font-bold">{winnersHistory.filter(w => w.status === 'announced').length}</p>
-                      </div>
-                      <Clock className="w-8 h-8 text-purple-200" />
-                    </div>
-                  </div>
-                </div>
+                <button
+                  onClick={() => setShowManualWinnerModal(true)}
+                  className="flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                >
+                  <Plus className="w-5 h-5 mr-2" />
+                  Add Winner
+                </button>
               </div>
-            )}
+
+              {/* Manual Winners Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {manualWinners.map((winner) => (
+                  <div key={winner.id} className={`rounded-2xl p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-200 ${
+                    winner.position === '1st' ? 'bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-300' :
+                    winner.position === '2nd' ? 'bg-gradient-to-br from-gray-50 to-slate-50 border-gray-300' :
+                    'bg-gradient-to-br from-orange-50 to-red-50 border-orange-300'
+                  }`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`px-3 py-1 rounded-full text-sm font-bold ${
+                        winner.position === '1st' ? 'bg-yellow-200 text-yellow-800' :
+                        winner.position === '2nd' ? 'bg-gray-200 text-gray-800' :
+                        'bg-orange-200 text-orange-800'
+                      }`}>
+                        {winner.position} Position
+                      </div>
+                      <button
+                        onClick={() => deleteManualWinner(winner.id)}
+                        className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                        title="Delete Winner"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    
+                    <div className="text-center mb-4">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl text-white mx-auto mb-3 ${
+                        winner.position === '1st' ? 'bg-gradient-to-br from-yellow-400 to-amber-500' :
+                        winner.position === '2nd' ? 'bg-gradient-to-br from-gray-400 to-slate-500' :
+                        'bg-gradient-to-br from-orange-400 to-red-500'
+                      }`}>
+                        {winner.position === '1st' ? '🥇' : winner.position === '2nd' ? '🥈' : '🥉'}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">{winner.playerName}</h3>
+                      <p className="text-sm text-gray-600">{winner.city}</p>
+                    </div>
+
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Player ID:</span>
+                        <span className="font-mono font-semibold text-blue-600">{winner.playerId}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Ticket ID:</span>
+                        <span className="font-mono font-semibold text-purple-600">{winner.ticketId}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Ticket No:</span>
+                        <span className="font-mono font-semibold text-indigo-600">{winner.ticketNumber}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Lottery:</span>
+                        <span className="font-mono font-semibold text-green-600">{winner.lotteryCode}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-center py-3 bg-white rounded-xl shadow-inner mb-3">
+                      <p className="text-sm text-gray-600 mb-1">Prize Amount</p>
+                      <p className="text-2xl font-bold text-green-600">₹{winner.prizeAmount.toLocaleString()}</p>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span>Added: {winner.createdDate}</span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        winner.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'
+                      }`}>
+                        {winner.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+
+                {manualWinners.length === 0 && (
+                  <div className="col-span-full text-center py-12">
+                    <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-lg">No manual winners added yet</p>
+                    <p className="text-gray-400 text-sm">Click "Add Winner" to manually select winners</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -1384,6 +1541,156 @@ const LotteryAdminDashboard = () => {
                     Announce Winner
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Manual Winner Modal */}
+        {showManualWinnerModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-3">
+                    <Star className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-800">Add Manual Winner</h3>
+                </div>
+                <button
+                  onClick={() => setShowManualWinnerModal(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600"
+                >
+                  <XCircle className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Position</label>
+                    <select
+                      value={manualWinnerForm.position}
+                      onChange={(e) => handleManualWinnerFormChange('position', e.target.value)}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    >
+                      <option value="1st">1st Place</option>
+                      <option value="2nd">2nd Place</option>
+                      <option value="3rd">3rd Place</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Player Name *</label>
+                    <input
+                      type="text"
+                      placeholder="Enter player name"
+                      value={manualWinnerForm.playerName}
+                      onChange={(e) => handleManualWinnerFormChange('playerName', e.target.value)}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Player ID *</label>
+                    <input
+                      type="text"
+                      placeholder="Enter player ID"
+                      value={manualWinnerForm.playerId}
+                      onChange={(e) => handleManualWinnerFormChange('playerId', e.target.value.toUpperCase())}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Ticket ID</label>
+                    <input
+                      type="text"
+                      placeholder="Auto-generated if empty"
+                      value={manualWinnerForm.ticketId}
+                      onChange={(e) => handleManualWinnerFormChange('ticketId', e.target.value.toUpperCase())}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Ticket Number *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g., 1E100"
+                      value={manualWinnerForm.ticketNumber}
+                      onChange={(e) => handleManualWinnerFormChange('ticketNumber', e.target.value.toUpperCase())}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Prize Amount (₹) *</label>
+                    <input
+                      type="number"
+                      placeholder="Enter prize amount"
+                      value={manualWinnerForm.prizeAmount}
+                      onChange={(e) => handleManualWinnerFormChange('prizeAmount', e.target.value)}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Lottery Code *</label>
+                    <select
+                      value={manualWinnerForm.lotteryCode}
+                      onChange={(e) => handleManualWinnerFormChange('lotteryCode', e.target.value)}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    >
+                      <option value="">Select lottery</option>
+                      {lotteries.map((lottery) => (
+                        <option key={lottery.id} value={lottery.code}>
+                          {lottery.code} - {lottery.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
+                    <input
+                      type="text"
+                      placeholder="Enter city"
+                      value={manualWinnerForm.city}
+                      onChange={(e) => handleManualWinnerFormChange('city', e.target.value)}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex gap-4">
+                <button
+                  onClick={() => {
+                    setShowManualWinnerModal(false);
+                    setManualWinnerForm({
+                      position: '1st',
+                      playerName: '',
+                      playerId: '',
+                      ticketId: '',
+                      ticketNumber: '',
+                      prizeAmount: '',
+                      lotteryCode: '',
+                      city: ''
+                    });
+                  }}
+                  className="flex-1 px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={addManualWinner}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 font-semibold"
+                >
+                  Add Winner
+                </button>
               </div>
             </div>
           </div>
