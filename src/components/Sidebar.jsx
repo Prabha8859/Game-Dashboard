@@ -33,8 +33,8 @@ import playzeloLogo from "../assets/image/logo2.png";
 
 const Sidebar = ({ onMenuClick, isDarkMode }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // main menus
-  const [openSubDropdown, setOpenSubDropdown] = useState(null); // nested submenus
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openSubDropdown, setOpenSubDropdown] = useState(null);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -78,10 +78,60 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
       bgColor: isDarkMode ? "bg-purple-900" : "bg-purple-50",
       dropdown: true,
       subItems: [
-        { name: "Ludo", key: "ludo", icon: <Dices />, iconColor: "text-purple-500" },
-        { name: "Jackpot", key: "jackpot", icon: <Coins />, iconColor: "text-yellow-500" },
-        { name: "Mines", key: "mines", icon: <Bomb />, iconColor: "text-red-500" },
-        { name: "Teen Patti", key: "teenPatti", icon: <Play />, iconColor: "text-green-500" },
+        {
+          name: "Ludo",
+          key: "ludo",
+          icon: <Dices />,
+          iconColor: "text-purple-500",
+          dropdown: true,
+          subItems: [
+            { name: "Wallet Ludo ", key: "walletludo", icon: <Dices />, iconColor: "text-blue-400" },
+            { name: "Transection Ludo", key: "transectionludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+            { name: "Game Ludo", key: "gameludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+            { name: "Report Ludo", key: "reportludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+            { name: "Users Ludo", key: "userludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+             { name: "UserDate Ludo", key: "userdataludo", icon: <Coins />, iconColor: "text-blue-500" },
+          ],
+        },
+        {
+          name: "Jackpot",
+          key: "jackpot",
+          icon: <Coins />,
+          iconColor: "text-yellow-500",
+          dropdown: true,
+          subItems: [
+            { name: "Manage Jackpot", key: "mangejackpot", icon: <Coins />, iconColor: "text-orange-400" },
+            { name: "Settings Jackpot", key: "walletjackpot", icon: <Coins />, iconColor: "text-green-500" },
+            { name: "Logs Jackpot", key: "logsjackpot", icon: <Coins />, iconColor: "text-green-500" },
+            { name: "UserData Jackpot", key: "userdatajackpot", icon: <Coins />, iconColor: "text-blue-500" },
+          ],
+        },
+        {
+         name: "Mines",
+          key: "mines",
+          icon: <Bomb />,
+          iconColor: "text-red-500",
+          dropdown: true,
+          subItems: [
+            { name: "Game Montory", key: "mangemine", icon: <Bomb />, iconColor: "text-red-400" },
+            { name: "User Mangement", key: "walletMine", icon: <BarChart3 />, iconColor: "text-blue-400" },
+            { name: "Control Admin", key: "controladmin", icon: <BarChart3 />, iconColor: "text-blue-400" },
+            { name: "User Jackpot", key: "userdatamine", icon: <Coins />, iconColor: "text-blue-500" },
+            
+          ],
+        },
+        {
+          name: "Teen Patti",
+          key: "teenPatti",
+          icon: <Play />,
+          iconColor: "text-green-500",
+          dropdown: true,
+          subItems: [
+            { name: "Teen Patti Rules", key: "mangeteenpatti", icon: <Play />, iconColor: "text-green-400" },
+            { name: "Teen Patti Statistics", key: "walletteenpatti", icon: <BarChart3 />, iconColor: "text-blue-400" },
+             { name: "User Jackpot", key: "userdatateenpatti", icon: <Coins />, iconColor: "text-blue-500" },
+          ],
+        },
         {
           name: "Lottery",
           key: "lottery",
@@ -89,9 +139,21 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           iconColor: "text-orange-500",
           dropdown: true,
           subItems: [
-            { name: "Create Lottery", key: "allLottery", icon: <Coins />, iconColor: "text-orange-400" },
-            { name: "Mange Lottery", key: "activeLottery", icon: <Coins />, iconColor: "text-green-500" },
+            { name: "Manage Lottery", key: "allLottery", icon: <Coins />, iconColor: "text-orange-400" },
+            { name: "Wallet Lottery", key: "activeLottery", icon: <Coins />, iconColor: "text-green-500" },
             { name: "User Lottery", key: "Resultslottery", icon: <Coins />, iconColor: "text-blue-500" },
+          ],
+        },
+        {
+          name: "BirdShooting",
+          key: "birdshooting",
+          icon: <Coins />,
+          iconColor: "text-orange-500",
+          dropdown: true,
+          subItems: [
+            { name: "Lobby Mange", key: "lobbymange", icon: <Coins />, iconColor: "text-orange-400" },
+            { name: "Gaming Mange", key: "gamingbird", icon: <Coins />, iconColor: "text-green-500" },
+            { name: "UserData Mange", key: "userdatabird", icon: <Coins />, iconColor: "text-blue-500" },
           ],
         },
         { name: "Game Log", key: "gameLogs", icon: <ClipboardList />, iconColor: "text-purple-500" },
@@ -173,7 +235,6 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           : "bg-white border-gray-200 text-gray-800"
       }`}
     >
-      {/* Logo + Toggle */}
       <div
         className={`flex items-center justify-between p-3 border-b ${
           isDarkMode ? "border-gray-700" : "border-gray-200"
@@ -184,11 +245,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
             isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
           }`}
         >
-          <img
-            src={playzeloLogo}
-            alt="PlayZelo Logo"
-            className="w-40 h-12 object-contain"
-          />
+          <img src={playzeloLogo} alt="PlayZelo Logo" className="w-40 h-12 object-contain" />
         </div>
         <button
           onClick={toggleSidebar}
@@ -197,27 +254,17 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           }`}
         >
           {isCollapsed ? (
-            <Menu
-              className={`w-6 h-6 ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            />
+            <Menu className={`w-6 h-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`} />
           ) : (
-            <X
-              className={`w-6 h-6 ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            />
+            <X className={`w-6 h-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`} />
           )}
         </button>
       </div>
 
-      {/* Menu Items */}
       <nav className="flex-1 px-4 py-4 custom-scroll overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.key}>
-              {/* Main Item */}
               <div
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                   item.active
@@ -235,9 +282,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                 }}
               >
                 <div className="flex-shrink-0">
-                  {React.cloneElement(item.icon, {
-                    className: `w-6 h-6 ${item.iconColor}`,
-                  })}
+                  {React.cloneElement(item.icon, { className: `w-6 h-6 ${item.iconColor}` })}
                 </div>
                 <span
                   className={`font-medium transition-all duration-300 ${
@@ -257,7 +302,6 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                 )}
               </div>
 
-              {/* Sub Items */}
               {item.dropdown && openDropdown === item.key && !isCollapsed && (
                 <ul className="pl-10 mt-2 space-y-1">
                   {item.subItems.map((subItem) => (
@@ -270,18 +314,14 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                         }`}
                         onClick={() => {
                           if (subItem.dropdown) {
-                            // 👇 Pehle page render hoga
                             onMenuClick(subItem.key);
-                            // 👇 Fir dropdown toggle
                             handleSubDropdownToggle(subItem.key);
                           } else {
                             onMenuClick(subItem.key);
                           }
                         }}
                       >
-                        <div
-                          className={`w-6 h-6 flex items-center justify-center mr-2 ${subItem.iconColor}`}
-                        >
+                        <div className={`w-6 h-6 flex items-center justify-center mr-2 ${subItem.iconColor}`}>
                           {subItem.icon}
                         </div>
                         <span className="flex-1">{subItem.name}</span>
@@ -300,25 +340,22 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                         )}
                       </div>
 
-                      {/* Nested SubItems (Lottery) */}
                       {subItem.dropdown && openSubDropdown === subItem.key && (
                         <ul className="pl-8 mt-1 space-y-1">
-                          {subItem.subItems.map((lotteryItem) => (
-                            <li key={lotteryItem.key}>
+                          {subItem.subItems.map((nestedItem) => (
+                            <li key={nestedItem.key}>
                               <div
                                 className={`flex items-center p-2 text-sm rounded-lg cursor-pointer transition-all duration-200 ${
                                   isDarkMode
                                     ? "text-gray-400 hover:bg-gray-800 hover:text-white"
                                     : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                                 }`}
-                                onClick={() => onMenuClick(lotteryItem.key)}
+                                onClick={() => onMenuClick(nestedItem.key)}
                               >
-                                <div
-                                  className={`w-6 h-6 flex items-center justify-center mr-2 ${lotteryItem.iconColor}`}
-                                >
-                                  {lotteryItem.icon}
+                                <div className={`w-6 h-6 flex items-center justify-center mr-2 ${nestedItem.iconColor}`}>
+                                  {nestedItem.icon}
                                 </div>
-                                {lotteryItem.name}
+                                <span>{nestedItem.name}</span>
                               </div>
                             </li>
                           ))}

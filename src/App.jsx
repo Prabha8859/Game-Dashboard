@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import LoginPage from "./components/AdminPages/LoginPage";
 import ProfileModal from "./components/AdminPages/ProfileModal";
+import LoginPage from "./components/AdminPages/LoginPage";
 
 // Import all pages
 import Dashboard from "./pages/Dashboard";
@@ -29,20 +29,50 @@ import LudoGame from "./pages/games/LudoPage";
 import JackpotGame from "./pages/games/Jackpotpage";
 import MinesGame from "./pages/games/MinesPage";
 import TeenPattiGame from "./pages/games/TeenPattiPage";
-import LotteryPage from "./pages/games/Lotterypage" ;
+import LotteryPage from "./pages/games/Lotterypage";
+import BirdShooting from './pages/games/BirdShooting'
 
-
-// Import Lottery pages
+// Lottery Subpages
 import AllLottery from "./pages/games/lottery-control/LotterySettingsPage";
 import ActiveLottery from "./pages/games/lottery-control/LotteryUserControlsPage";
 import LotteryResults from "./pages/games/lottery-control/LotteryUserDataPage";
 
+// Jackpot Subpages
+import Mangejackpots from "./pages/games/Jackpot-control/MangeJackpot";
+import Walletjackpot from "./pages/games/Jackpot-control/WalletJackpt";
+import Userdatajackpot from "./pages/games/Jackpot-control/UserdataJackpot";
+import Logsjackpot from "./pages/games/Jackpot-control/LogsJackpot";
+
+// Ludo Subpages 
+import WalletLudo from './pages/games/Ludo-control/WalletLudo'; 
+import TransectionLudo from './pages/games/Ludo-control/TransectionLudo'; 
+import GameLudo from './pages/games/Ludo-control/GameLudo';
+ import ReportLudo from './pages/games/Ludo-control/Report'; 
+ import UserLudo from './pages/games/Ludo-control/UserLudo'; 
+ import UserdataLudo from './pages/games/Ludo-control/UserdataLudo';
+
+// Mine Subpages 
+import MangeMine from './pages/games/Mine-control/GameMonitory';
+import WalletMine from './pages/games/Mine-control/WalletMine';
+import UserdataMine from './pages/games/Mine-control/UserdataMine';
+import ControlAdmin from './pages/games/Mine-control/ControlAdmin';
+
+// Teenpatti Subpages 
+import MangeTeenpatti from './pages/games/Teenpatti-control/MangeTeenpatti';
+import WalletTeenpatti from './pages/games/Teenpatti-control/WalletTeenpatti';
+import UserdataTeenpatti from './pages/games/Teenpatti-control/UserdataTeenpatti';
+
+
+// Bird Shooting 
+import GamingBird from './pages/games/BirdShooting-Control/GamingBird';
+import LobbyMange from './pages/games/BirdShooting-Control/Lobbymange';
+import UserDataBird from './pages/games/BirdShooting-Control/UserDatamange';
 
 export default function App() {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isProfileModalOpen,setIsProfileModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [activeProfileSection, setActiveProfileSection] = useState("profile");
 
   useEffect(() => {
@@ -56,6 +86,7 @@ export default function App() {
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
   const handleLogin = () => setIsLoggedIn(true);
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setIsProfileModalOpen(false);
@@ -121,14 +152,69 @@ export default function App() {
         return <TeenPattiGame isDarkMode={isDarkMode} />;
       case "lottery":
         return <LotteryPage isDarkMode={isDarkMode} />;
+      case "birdshooting":
+        return <BirdShooting isDarkMode={isDarkMode} />;
 
-        // Lottery submenu
-    case "allLottery":
-      return <AllLottery isDarkMode={isDarkMode} />;
-    case "activeLottery":
-      return <ActiveLottery isDarkMode={isDarkMode} />;
-    case "Resultslottery":
-      return <LotteryResults isDarkMode={isDarkMode} />; 
+      // Lottery subpages
+      case "allLottery":
+        return <AllLottery isDarkMode={isDarkMode} />;
+      case "activeLottery":
+        return <ActiveLottery isDarkMode={isDarkMode} />;
+      case "Resultslottery":
+        return <LotteryResults isDarkMode={isDarkMode} />;
+
+      // Jackpot subpages
+      case "mangejackpot":
+        return <Mangejackpots isDarkMode={isDarkMode} />;
+      case "walletjackpot":
+        return <Walletjackpot isDarkMode={isDarkMode} />;
+      case "userdatajackpot":
+        return <Userdatajackpot isDarkMode={isDarkMode} />;
+       case "logsjackpot":
+        return <Logsjackpot isDarkMode={isDarkMode} />;
+
+      // Ludo subpages 
+
+      case "walletludo": 
+        return <WalletLudo isDarkMode={isDarkMode} />;
+      case "transectionludo":
+         return <TransectionLudo isDarkMode={isDarkMode} />; 
+      case "userdataludo":
+         return <UserdataLudo isDarkMode={isDarkMode} />; 
+      case "gameludo": 
+        return <GameLudo isDarkMode={isDarkMode} />; 
+      case "reportludo":
+         return <ReportLudo isDarkMode={isDarkMode} />; 
+      case "userludo": 
+        return <UserLudo isDarkMode={isDarkMode} />;
+
+
+       // Mine subpages
+      case "mangemine":
+        return <MangeMine isDarkMode={isDarkMode} />;
+      case "walletMine":
+        return <WalletMine  isDarkMode={isDarkMode} />;
+      case "userdatamine":
+        return <UserdataMine isDarkMode={isDarkMode} />;
+      case "controladmin":
+        return <ControlAdmin isDarkMode={isDarkMode} />;
+
+       // teenPatti subpages
+      case "mangeteenpatti":
+        return <MangeTeenpatti isDarkMode={isDarkMode} />;
+      case "walletteenpatti":
+        return <WalletTeenpatti  isDarkMode={isDarkMode} />;
+      case "userdatateenpatti":
+        return <UserdataTeenpatti isDarkMode={isDarkMode} />;
+
+      // Bird Shooting Subpage 
+       case "lobbymange":
+        return <LobbyMange  isDarkMode={isDarkMode} />;
+      case "gamingbird":
+        return <GamingBird isDarkMode={isDarkMode} />;
+     
+      case "userdatabird":
+        return <UserDataBird isDarkMode={isDarkMode} />;
 
       default:
         return <Dashboard isDarkMode={isDarkMode} />;
