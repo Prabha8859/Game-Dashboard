@@ -14,6 +14,9 @@ import {
   Wallet,
   Ban,
   ShieldCheck,
+  Zap,
+  Ticket,
+  Users,
 } from "lucide-react";
 
 /**
@@ -25,13 +28,22 @@ import {
  * - Desktop: table view
  * - Add user modal, delete confirm modal
  * - Drawer with tabs (Profile, Wallet, History)
+ * - New: Game Rounds Management view
+ * - New: Detailed User Bet History
  * - Export CSV
  */
 
 const STATUS_COLORS = {
   Active: "bg-emerald-100 text-emerald-700 ring-1 ring-inset ring-emerald-200",
-  Banned: "bg-red-100 text-red-700 ring-1 ring-inset ring-red-200",
   Suspended: "bg-amber-100 text-amber-800 ring-1 ring-inset ring-amber-200",
+  Banned: "bg-red-100 text-red-700 ring-1 ring-inset ring-red-200",
+};
+
+const ROUND_STATUS_COLORS = {
+  Completed: "bg-emerald-100 text-emerald-700",
+  "Bomb Hit": "bg-red-100 text-red-700",
+  "Round Canceled": "bg-gray-100 text-gray-700",
+  Ongoing: "bg-blue-100 text-blue-700",
 };
 
 const initialUsers = [
@@ -46,15 +58,19 @@ const initialUsers = [
         id: "m-1",
         time: "2025-09-01 12:00",
         bet: 50,
-        result: "+100",
         game: "Mines 5x5",
+        multiplier: 2.5,
+        cashout: 125,
+        netProfitLoss: 75,
       },
       {
         id: "m-2",
         time: "2025-08-30 14:15",
         bet: 30,
-        result: "-30",
         game: "Mines 3x3",
+        multiplier: 0,
+        cashout: 0,
+        netProfitLoss: -30,
       },
     ],
   },
@@ -69,8 +85,10 @@ const initialUsers = [
         id: "m-3",
         time: "2025-08-28 09:45",
         bet: 20,
-        result: "-20",
         game: "Mines 5x5",
+        multiplier: 0,
+        cashout: 0,
+        netProfitLoss: -20,
       },
     ],
   },
@@ -85,8 +103,10 @@ const initialUsers = [
         id: "m-4",
         time: "2025-08-25 17:30",
         bet: 100,
-        result: "+400",
         game: "Mines 5x5",
+        multiplier: 4.5,
+        cashout: 450,
+        netProfitLoss: 350,
       },
     ],
   },
@@ -101,17 +121,61 @@ const initialUsers = [
         id: "m-5",
         time: "2025-08-20 11:10",
         bet: 50,
-        result: "-50",
         game: "Mines 3x3",
+        multiplier: 0,
+        cashout: 0,
+        netProfitLoss: -50,
       },
     ],
   },
 ];
 
+const initialGameRounds = [
+  {
+    id: 1001,
+    username: "miner_neo",
+    betAmount: 50,
+    minesCount: 5,
+    status: "Completed",
+    result: "₹ 125.00",
+    time: "2025-09-01 12:00",
+  },
+  {
+    id: 1002,
+    username: "minehunter",
+    betAmount: 20,
+    minesCount: 5,
+    status: "Bomb Hit",
+    result: "Loss",
+    time: "2025-08-28 09:45",
+  },
+  {
+    id: 1003,
+    username: "gold_digger",
+    betAmount: 100,
+    minesCount: 5,
+    status: "Completed",
+    result: "₹ 450.00",
+    time: "2025-08-25 17:30",
+  },
+  {
+    id: 1004,
+    username: "noob_miner",
+    betAmount: 50,
+    minesCount: 3,
+    status: "Bomb Hit",
+    result: "Loss",
+    time: "2025-08-20 11:10",
+  },
+];
+
 export default function MinesUserManagement() {
   const [users, setUsers] = useState(initialUsers);
+  const [gameRounds, setGameRounds] = useState(initialGameRounds);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+
+  const [dashboardTab, setDashboardTab] = useState("users"); // users | rounds
 
   const [showAdd, setShowAdd] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -126,7 +190,7 @@ export default function MinesUserManagement() {
   const [activeUser, setActiveUser] = useState(null);
   const [drawerTab, setDrawerTab] = useState("profile"); // profile | wallet | history
 
-  const filtered = useMemo(() => {
+  const filteredUsers = useMemo(() => {
     return users.filter((u) => {
       const matchesQuery =
         !query ||
@@ -212,11 +276,10 @@ export default function MinesUserManagement() {
       <div className="flex items-start md:items-center justify-between gap-4 flex-col md:flex-row">
         <div>
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight flex items-center gap-2">
-            <Wallet className="w-6 h-6 text-indigo-500" /> Mines – User
-            Management
+            <Zap className="w-6 h-6 text-indigo-500" /> Mines Dashboard
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Manage Mines players, balances, statuses, and view bet history.
+            Manage Mines players, game rounds, balances, and history.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -235,140 +298,172 @@ export default function MinesUserManagement() {
         </div>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-        <KPI title="Total Users" value={users.length} />
-        <KPI
-          title="Active"
-          value={users.filter((u) => u.status === "Active").length}
-          tone="emerald"
-        />
-        <KPI
-          title="Suspended"
-          value={users.filter((u) => u.status === "Suspended").length}
-          tone="amber"
-        />
-        <KPI title="Total Balance" value={`₹ ${totalBalance.toFixed(2)}`} />
+      {/* --- Dashboard Tabs --- */}
+      <div className="mt-6 flex gap-3 border-b border-gray-200">
+        <TabButton
+          active={dashboardTab === "users"}
+          onClick={() => setDashboardTab("users")}
+          icon={<Users className="w-4 h-4" />}
+        >
+          User Management
+        </TabButton>
+        <TabButton
+          active={dashboardTab === "rounds"}
+          onClick={() => setDashboardTab("rounds")}
+          icon={<Ticket className="w-4 h-4" />}
+        >
+          Game Rounds
+        </TabButton>
       </div>
 
-      {/* Filters */}
-      <div className="mt-4 flex flex-col md:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            placeholder="Search by ID or username..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
-          <select
-            className="rounded-xl border border-gray-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option>All</option>
-            <option>Active</option>
-            <option>Suspended</option>
-            <option>Banned</option>
-          </select>
-        </div>
-      </div>
+      {/* --- Main Content based on Tab --- */}
+      {dashboardTab === "users" && (
+        <>
+          {/* KPIs */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+            <KPI title="Total Users" value={users.length} />
+            <KPI
+              title="Active"
+              value={users.filter((u) => u.status === "Active").length}
+              tone="emerald"
+            />
+            <KPI
+              title="Suspended"
+              value={users.filter((u) => u.status === "Suspended").length}
+              tone="amber"
+            />
+            <KPI
+              title="Total Balance"
+              value={`₹ ${totalBalance.toFixed(2)}`}
+            />
+          </div>
 
-      {/* List (mobile) */}
-      <div className="mt-4 space-y-3 md:hidden">
-        {filtered.length === 0 && (
-          <div className="text-center py-8 text-gray-500">No users found.</div>
-        )}
-        {filtered.map((u) => (
-          <UserCard
-            key={u.id}
-            user={u}
-            onView={() => openView(u)}
-            onDelete={() => setToDelete(u)}
-          />
-        ))}
-      </div>
+          {/* Filters */}
+          <div className="mt-4 flex flex-col md:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                placeholder="Search by ID or username..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-gray-400" />
+              <select
+                className="rounded-xl border border-gray-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option>All</option>
+                <option>Active</option>
+                <option>Suspended</option>
+                <option>Banned</option>
+              </select>
+            </div>
+          </div>
 
-      {/* Table (desktop) */}
-      <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white hidden md:block">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="text-white bg-gradient-to-t from-[#9890e3] to-[#b1f4cf]">
-              <tr>
-                <Th>ID</Th>
-                <Th>Username</Th>
-                <Th className="text-right">Balance (₹)</Th>
-                <Th>Status</Th>
-                <Th>Last Bet</Th>
-                <Th className="text-right">Actions</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500">
-                    No users found.
-                  </td>
-                </tr>
-              )}
-              {filtered.map((u) => (
-                <tr
-                  key={u.id}
-                  className="border-t border-gray-100 hover:bg-gray-50"
-                >
-                  <Td>#{u.id}</Td>
-                  <Td>
-                    <div className="font-medium">{u.username}</div>
-                    <div className="text-xs text-gray-500">Mines Player</div>
-                  </Td>
-                  <Td className="text-right font-semibold">
-                    {Number(u.balance).toFixed(2)}
-                  </Td>
-                  <Td>
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                        STATUS_COLORS[u.status]
-                      }`}
+          {/* User List (mobile) */}
+          <div className="mt-4 space-y-3 md:hidden">
+            {filteredUsers.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No users found.
+              </div>
+            )}
+            {filteredUsers.map((u) => (
+              <UserCard
+                key={u.id}
+                user={u}
+                onView={() => openView(u)}
+                onDelete={() => setToDelete(u)}
+              />
+            ))}
+          </div>
+
+          {/* User Table (desktop) */}
+          <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white hidden md:block">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="text-white bg-gradient-to-t from-[#9890e3] to-[#b1f4cf]">
+                  <tr>
+                    <Th>ID</Th>
+                    <Th>Username</Th>
+                    <Th className="text-right">Balance (₹)</Th>
+                    <Th>Status</Th>
+                    <Th>Last Bet</Th>
+                    <Th className="text-right">Actions</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="text-center py-8 text-gray-500">
+                        No users found.
+                      </td>
+                    </tr>
+                  )}
+                  {filteredUsers.map((u) => (
+                    <tr
+                      key={u.id}
+                      className="border-t border-gray-100 hover:bg-gray-50"
                     >
-                      {u.status}
-                    </span>
-                  </Td>
-                  <Td className="text-gray-500">{u.lastBetAt}</Td>
-                  <Td className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <button
-                        onClick={() => openView(u)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to top, #6a11cb 0%, #2575fc 100%)",
-                        }}
-                        title="View / Manage"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setToDelete(u)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white"
-                        style={{
-                          backgroundImage:
-                            "linear-gradient(to right, #f85032 0%, #e73827 100%)",
-                        }}
-                        title="Delete user"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </Td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                      <Td>#{u.id}</Td>
+                      <Td>
+                        <div className="font-medium">{u.username}</div>
+                        <div className="text-xs text-gray-500">Mines Player</div>
+                      </Td>
+                      <Td className="text-right font-semibold">
+                        {Number(u.balance).toFixed(2)}
+                      </Td>
+                      <Td>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                            STATUS_COLORS[u.status]
+                          }`}
+                        >
+                          {u.status}
+                        </span>
+                      </Td>
+                      <Td className="text-gray-500">{u.lastBetAt}</Td>
+                      <Td className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <button
+                            onClick={() => openView(u)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white"
+                            style={{
+                              backgroundImage:
+                                "linear-gradient(to top, #6a11cb 0%, #2575fc 100%)",
+                            }}
+                            title="View / Manage"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => setToDelete(u)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white"
+                            style={{
+                              backgroundImage:
+                                "linear-gradient(to right, #f85032 0%, #e73827 100%)",
+                            }}
+                            title="Delete user"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {dashboardTab === "rounds" && (
+        <GameRoundsTable gameRounds={gameRounds} />
+      )}
 
       {/* Add User Modal */}
       {showAdd && (
@@ -504,18 +599,21 @@ export default function MinesUserManagement() {
               <TabButton
                 active={drawerTab === "profile"}
                 onClick={() => setDrawerTab("profile")}
+                icon={<ShieldCheck className="w-4 h-4" />}
               >
                 Profile
               </TabButton>
               <TabButton
                 active={drawerTab === "wallet"}
                 onClick={() => setDrawerTab("wallet")}
+                icon={<Wallet className="w-4 h-4" />}
               >
                 Wallet
               </TabButton>
               <TabButton
                 active={drawerTab === "history"}
                 onClick={() => setDrawerTab("history")}
+                icon={<History className="w-4 h-4" />}
               >
                 Mines History
               </TabButton>
@@ -552,12 +650,17 @@ export default function MinesUserManagement() {
                         Mines Stats
                       </h3>
                       <LineItem
-                        label="Total Shots"
-                        value={activeUser.totalShots || "—"}
+                        label="Total Bets"
+                        value={activeUser.history.length || 0}
                       />
                       <LineItem
-                        label="Accuracy"
-                        value={activeUser.accuracy || "—"}
+                        label="Net Profit"
+                        value={`₹ ${
+                          activeUser.history
+                            .reduce((sum, h) => sum + Number(h.netProfitLoss || 0), 0)
+                            .toFixed(2)
+                        }`}
+                        valueClass="font-semibold"
                       />
                       <LineItem
                         label="Current Balance"
@@ -599,6 +702,107 @@ export default function MinesUserManagement() {
 }
 
 /* ---------------- UI Subcomponents ---------------- */
+
+function TabButton({ children, active, onClick, icon }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-colors ${
+        active
+          ? "bg-white text-indigo-700 border-b-2 border-indigo-500 -mb-[1px]"
+          : "bg-transparent text-gray-600 hover:bg-gray-100"
+      }`}
+    >
+      {icon} {children}
+    </button>
+  );
+}
+
+function GameRoundsTable({ gameRounds }) {
+  if (!gameRounds || gameRounds.length === 0) {
+    return (
+      <div className="mt-4 text-center py-8 text-gray-500">
+        No game rounds found.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white">
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead className="text-white bg-gradient-to-t from-[#9890e3] to-[#b1f4cf]">
+            <tr>
+              <Th>Round ID</Th>
+              <Th>User</Th>
+              <Th className="text-right">Bet Amount</Th>
+              <Th>Mines</Th>
+              <Th>Status</Th>
+              <Th>Result</Th>
+              <Th>Time</Th>
+              <Th className="text-right">Actions</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {gameRounds.map((round, index) => (
+              <tr
+                key={round.id}
+                className={`border-t border-gray-100 ${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                <Td>#{round.id}</Td>
+                <Td>
+                  <div className="font-medium">{round.username}</div>
+                </Td>
+                <Td className="text-right">₹ {Number(round.betAmount).toFixed(2)}</Td>
+                <Td>{round.minesCount}</Td>
+                <Td>
+                  <span
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                      ROUND_STATUS_COLORS[round.status]
+                    }`}
+                  >
+                    {round.status}
+                  </span>
+                </Td>
+                <Td>
+                  <span
+                    className={`font-semibold ${
+                      round.result.includes("₹") ? "text-emerald-600" : "text-red-600"
+                    }`}
+                  >
+                    {round.result}
+                  </span>
+                </Td>
+                <Td className="text-gray-500">{round.time}</Td>
+                <Td className="text-right">
+                  <div className="flex justify-end gap-1">
+                    <button
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white bg-red-500 hover:bg-red-600"
+                      title="Flag for Fraud"
+                    >
+                      <Ban className="w-4 h-4" />
+                    </button>
+                    <button
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-white bg-gray-500 hover:bg-gray-600"
+                      title="Cancel Round"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </Td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// All other subcomponents remain the same but are included here for completeness.
+
 function KPI({ title, value, tone = "slate" }) {
   const tones = {
     slate: "bg-slate-50 text-slate-700",
@@ -641,26 +845,10 @@ function Drawer({ children, onClose }) {
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      {/* Responsive: full width on small, right panel on sm+ */}
       <div className="absolute inset-y-0 right-0 w-full sm:w-[520px] max-w-[100vw] bg-white border-l border-gray-200 shadow-2xl">
         {children}
       </div>
     </div>
-  );
-}
-
-function TabButton({ children, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
-        active
-          ? "bg-gray-900 text-white border-transparent"
-          : "bg-transparent text-gray-600 border-gray-200 hover:bg-gray-100"
-      }`}
-    >
-      {children}
-    </button>
   );
 }
 
@@ -761,25 +949,37 @@ function HistoryPanel({ history }) {
       {currentPageData.map((h) => (
         <div
           key={h.id}
-          className="rounded-xl border border-gray-200 p-3 flex items-center justify-between 
-                     hover:shadow-lg hover:border-indigo-300 transition-all duration-300 cursor-pointer"
+          className="rounded-xl border border-gray-200 p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between
+                      hover:shadow-lg hover:border-indigo-300 transition-all duration-300"
         >
-          <div>
+          <div className="flex-1">
             <div className="font-medium text-sm text-gray-800">{h.game}</div>
-            <div className="text-xs text-gray-500">{h.time}</div>
+            <div className="text-xs text-gray-500 mt-1">{h.time}</div>
           </div>
-          <div className="text-right">
+          <div className="mt-2 sm:mt-0 text-left sm:text-right">
             <div className="text-sm text-gray-700">Bet: ₹ {Number(h.bet).toFixed(2)}</div>
-            <div
-              className={`text-sm font-semibold ${
-                String(h.result).startsWith("+")
-                  ? "text-emerald-600"
-                  : String(h.result).startsWith("-")
-                  ? "text-red-600"
-                  : "text-gray-600"
-              }`}
-            >
-              Result: {h.result}
+            <div className="text-sm text-gray-700">
+              Multiplier: {h.multiplier ? `${h.multiplier}x` : "N/A"}
+            </div>
+            <div className="text-sm font-semibold">
+              Cashout:{" "}
+              <span
+                className={
+                  Number(h.cashout) > 0 ? "text-emerald-600" : "text-red-600"
+                }
+              >
+                ₹ {Number(h.cashout).toFixed(2)}
+              </span>
+            </div>
+            <div className="text-sm font-semibold">
+              Net P/L:{" "}
+              <span
+                className={
+                  Number(h.netProfitLoss) >= 0 ? "text-emerald-600" : "text-red-600"
+                }
+              >
+                ₹ {Number(h.netProfitLoss).toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
@@ -787,62 +987,44 @@ function HistoryPanel({ history }) {
 
       {/* Stylish Numbered Pagination */}
       <div className="flex items-center justify-center gap-2 pt-4 flex-wrap">
-        {/* First & Prev */}
         <button
           onClick={() => setPage(1)}
           disabled={page === 1}
-          className="px-3 py-1.5 rounded-full text-sm font-medium 
-                     bg-gradient-to-r from-blue-500 to-indigo-500 text-white 
-                     shadow hover:shadow-lg active:scale-95 transition-all 
-                     disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow hover:shadow-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           ⏮
         </button>
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="px-3 py-1.5 rounded-full text-sm font-medium 
-                     bg-gradient-to-r from-blue-400 to-indigo-400 text-white 
-                     shadow hover:shadow-lg active:scale-95 transition-all 
-                     disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-400 to-indigo-400 text-white shadow hover:shadow-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           ◀
         </button>
-
-        {/* Page Numbers */}
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
           <button
             key={num}
             onClick={() => setPage(num)}
-            className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all
-              ${
-                page === num
-                  ? "bg-indigo-600 text-white shadow-lg scale-105"
-                  : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-              }`}
+            className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${
+              page === num
+                ? "bg-indigo-600 text-white shadow-lg scale-105"
+                : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+            }`}
           >
             {num}
           </button>
         ))}
-
-        {/* Next & Last */}
         <button
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page === totalPages}
-          className="px-3 py-1.5 rounded-full text-sm font-medium 
-                     bg-gradient-to-r from-indigo-400 to-blue-400 text-white 
-                     shadow hover:shadow-lg active:scale-95 transition-all 
-                     disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-400 to-blue-400 text-white shadow hover:shadow-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           ▶
         </button>
         <button
           onClick={() => setPage(totalPages)}
           disabled={page === totalPages}
-          className="px-3 py-1.5 rounded-full text-sm font-medium 
-                     bg-gradient-to-r from-indigo-500 to-blue-500 text-white 
-                     shadow hover:shadow-lg active:scale-95 transition-all 
-                     disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow hover:shadow-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
           ⏭
         </button>

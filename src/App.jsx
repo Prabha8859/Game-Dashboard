@@ -45,9 +45,9 @@ import Logsjackpot from "./pages/games/Jackpot-control/LogsJackpot";
 
 // Ludo Subpages 
 import WalletLudo from './pages/games/Ludo-control/WalletLudo'; 
-import TransectionLudo from './pages/games/Ludo-control/TransectionLudo'; 
+import TransectionLudo from './pages/games/Ludo-control/Player&Matches'; 
 import GameLudo from './pages/games/Ludo-control/GameLudo';
- import ReportLudo from './pages/games/Ludo-control/Report'; 
+ import ReportLudo from './pages/games/Ludo-control/AdminConsole'; 
  import UserLudo from './pages/games/Ludo-control/UserLudo'; 
  import UserdataLudo from './pages/games/Ludo-control/UserdataLudo';
 

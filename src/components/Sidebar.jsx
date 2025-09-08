@@ -60,14 +60,14 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
     {
       name: "Referral",
       icon: <Users />,
-      key: "referral",
+      to: "/referral",
       iconColor: "text-orange-600",
       bgColor: isDarkMode ? "bg-orange-900" : "bg-orange-50",
       dropdown: true,
       subItems: [
-        { name: "Referral Links", key: "referralLinks", icon: <Link />, iconColor: "text-orange-500" },
-        { name: "Referral Earnings", key: "referralEarnings", icon: <DollarSign />, iconColor: "text-orange-500" },
-        { name: "Referral Users", key: "referralUsers", icon: <UserCheck />, iconColor: "text-orange-500" },
+        { name: "Referral Links", to: "referralLinks", icon: <Link />, iconColor: "text-orange-500" },
+        { name: "Referral Earnings", to: "/referralEarnings", icon: <DollarSign />, iconColor: "text-orange-500" },
+        { name: "Referral Users", to: "/referralUsers", icon: <UserCheck />, iconColor: "text-orange-500" },
       ],
     },
     {
@@ -85,10 +85,12 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           iconColor: "text-purple-500",
           dropdown: true,
           subItems: [
-            { name: "Wallet Ludo ", key: "walletludo", icon: <Dices />, iconColor: "text-blue-400" },
-            { name: "Transection Ludo", key: "transectionludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+             { name: "Admin Console", key: "reportludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+             { name: "Player&Matches", key: "transectionludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+            { name: "Wallet&Winner", key: "walletludo", icon: <Dices />, iconColor: "text-blue-400" },
+           
             { name: "Game Ludo", key: "gameludo", icon: <BarChart3 />, iconColor: "text-green-400" },
-            { name: "Report Ludo", key: "reportludo", icon: <BarChart3 />, iconColor: "text-green-400" },
+           
             { name: "Users Ludo", key: "userludo", icon: <BarChart3 />, iconColor: "text-green-400" },
              { name: "UserDate Ludo", key: "userdataludo", icon: <Coins />, iconColor: "text-blue-500" },
           ],
@@ -128,7 +130,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           dropdown: true,
           subItems: [
             { name: "Teen Patti Rules", key: "mangeteenpatti", icon: <Play />, iconColor: "text-green-400" },
-            { name: "Teen Patti Statistics", key: "walletteenpatti", icon: <BarChart3 />, iconColor: "text-blue-400" },
+            { name: "Transactions&Wallet ", key: "walletteenpatti", icon: <BarChart3 />, iconColor: "text-blue-400" },
              { name: "User Jackpot", key: "userdatateenpatti", icon: <Coins />, iconColor: "text-blue-500" },
           ],
         },
@@ -153,7 +155,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           subItems: [
             { name: "Lobby Mange", key: "lobbymange", icon: <Coins />, iconColor: "text-orange-400" },
             { name: "Gaming Mange", key: "gamingbird", icon: <Coins />, iconColor: "text-green-500" },
-            { name: "UserData Mange", key: "userdatabird", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "UserData Mange", key: "userdata", icon: <Coins />, iconColor: "text-blue-500" },
           ],
         },
         { name: "Game Log", key: "gameLogs", icon: <ClipboardList />, iconColor: "text-purple-500" },
@@ -374,3 +376,5 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
 };
 
 export default Sidebar;
+
+
