@@ -596,7 +596,7 @@ const LudoAdminDashboard = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto bg-transparent">
+          <div className="overflow-x-auto bg-transparent max-w-[900px]">
             <table className="hidden md:table w-full text-left border-separate border-spacing-y-3 overflow-hidden">
               <thead
                 style={{
@@ -605,10 +605,10 @@ const LudoAdminDashboard = () => {
                 className="text-white"
               >
                 <tr>
-                  <th className="px-4 py-3 rounded-l-lg">User ID</th>
+                  <th className="px-4 py-3 rounded-l-lg whitespace-nowrap">User ID</th>
                   <th className="px-4 py-3">Name</th>
                   <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Games Played</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Games Played</th>
                   <th className="px-4 py-3">Wins</th>
                   <th className="px-4 py-3">Losses</th>
                   <th className="px-4 py-3">Balance</th>

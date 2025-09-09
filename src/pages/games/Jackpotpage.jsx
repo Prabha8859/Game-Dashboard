@@ -102,7 +102,12 @@ const Jackpotpage = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 py-6 md:py-8">
         {/* Enhanced Header */}
-        <div className="text-center mb-8">
+        <div 
+          className="text-center mb-8"
+          data-aos="fade-down"
+          data-aos-duration="800"
+          data-aos-easing="ease-out"
+        >
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
             🎰 Jackpot Game Dashboard
           </h1>
@@ -111,67 +116,90 @@ const Jackpotpage = () => {
           </p>
         </div>
 
-        {/* Enhanced Top Stats - 6 Cards in 2 rows */}
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        {/* Enhanced Top Stats - 6 Cards in lg:grid-cols-6 and md:grid-cols-3 */}
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-6 mb-8">
           <StatBox
             title="Total Players"
             value={formatNumber(2350)}
-            icon={<Users className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            icon={<Users className="h-4 w-4" />}
+            borderColor="border-blue-500"
+            iconBg="bg-blue-100"
+            iconColor="text-blue-600"
             trend="+12.5%"
             trendUp={true}
+            index={0}
           />
 
           <StatBox
             title="Total Bets Placed"
             value={formatNumber(89650)}
-            icon={<Target className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+            icon={<Target className="h-4 w-4" />}
+            borderColor="border-pink-500"
+            iconBg="bg-pink-100"
+            iconColor="text-pink-600"
             trend="+8.3%"
             trendUp={true}
+            index={1}
           />
 
           <StatBox
             title="Completed Jackpots"
-            value={`${formatNumber(156)} / ${formatNumber(167)}`}
-            icon={<Award className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+            value={`${formatNumber(156)}/${formatNumber(167)}`}
+            icon={<Award className="h-4 w-4" />}
+            borderColor="border-cyan-500"
+            iconBg="bg-cyan-100"
+            iconColor="text-cyan-600"
             trend="93.4%"
             trendUp={true}
+            index={2}
           />
 
           <StatBox
             title="Total Revenue"
             value={formatCurrency(856000)}
-            icon={<DollarSign className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+            icon={<DollarSign className="h-4 w-4" />}
+            borderColor="border-green-500"
+            iconBg="bg-green-100"
+            iconColor="text-green-600"
             trend="+15.2%"
             trendUp={true}
+            index={3}
           />
 
           <StatBox
             title="Pending Withdrawals"
             value={formatCurrency(124500)}
-            icon={<Clock className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+            icon={<Clock className="h-4 w-4" />}
+            borderColor="border-orange-500"
+            iconBg="bg-orange-100"
+            iconColor="text-orange-600"
             trend="-5.8%"
             trendUp={false}
+            index={4}
           />
 
           <StatBox
             title="Current Pool Balance"
             value={formatCurrency(425000)}
-            icon={<Wallet className="h-6 w-6" />}
-            gradient="linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
+            icon={<Wallet className="h-4 w-4" />}
+            borderColor="border-purple-500"
+            iconBg="bg-purple-100"
+            iconColor="text-purple-600"
             trend="+22.1%"
             trendUp={true}
+            index={5}
           />
         </div>
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
           {/* Monthly Growth */}
-          <Card className="xl:col-span-2">
+          <Card 
+            className="xl:col-span-2"
+            dataAos="zoom-in"
+            dataAosDuration="800"
+            dataAosEasing="ease-out"
+          >
             <CardTitle>📈 Monthly Growth Trends</CardTitle>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -230,7 +258,12 @@ const Jackpotpage = () => {
           </Card>
 
           {/* Jackpot Status Pie Chart */}
-          <Card>
+          <Card 
+            dataAos="zoom-in"
+            dataAosDelay="200"
+            dataAosDuration="800"
+            dataAosEasing="ease-out"
+          >
             <CardTitle>🎯 Jackpot Status</CardTitle>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -265,7 +298,11 @@ const Jackpotpage = () => {
 
         {/* Win/Loss & Top Players */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <Card>
+          <Card 
+            dataAos="fade-left"
+            dataAosDuration="800"
+            dataAosEasing="ease-out"
+          >
             <CardTitle>⚡ Win / Loss Trends</CardTitle>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -314,7 +351,11 @@ const Jackpotpage = () => {
             </div>
           </Card>
 
-          <Card>
+          <Card 
+            dataAos="fade-right"
+            dataAosDuration="800"
+            dataAosEasing="ease-out"
+          >
             <CardTitle>🏆 Top Players Leaderboard</CardTitle>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -360,7 +401,11 @@ const Jackpotpage = () => {
         </div>
 
         {/* Revenue Analytics */}
-        <Card>
+        <Card 
+          dataAos="fade-up"
+          dataAosDuration="800"
+          dataAosEasing="ease-out"
+        >
           <CardTitle>💰 Revenue & Withdrawals Analysis</CardTitle>
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -438,51 +483,63 @@ const Jackpotpage = () => {
 };
 
 // --- Enhanced Sub Components ---
-function StatBox({ title, value, icon, gradient, trend, trendUp }) {
+function StatBox({ title, value, icon, borderColor, iconBg, iconColor, trend, trendUp, index }) {
   return (
-    <div
-      className="relative p-6 rounded-3xl text-white shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden group"
-      style={{ backgroundImage: gradient }}
+    <div 
+      className={`relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-t-4 ${borderColor} overflow-hidden w-full h-fit`}
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+      data-aos-duration="800"
+      data-aos-easing="ease-out"
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="p-3 bg-white/20 rounded-2xl group-hover:bg-white/30 transition-colors duration-300">
-          {icon}
-        </div>
-        <div className="flex items-center space-x-2">
+      {/* Card Content */}
+      <div className="px-2 py-3">
+        {/* Header with Icon and Trend */}
+        <div className="flex items-center justify-between mb-2">
+          <div className={`p-2 rounded-xl ${iconBg}`}>
+            <div className={iconColor}>
+              {icon}
+            </div>
+          </div>
+          
+          {/* Trend Indicator */}
           {trend && (
-            <>
+            <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg text-xs font-semibold ${
+              trendUp 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'
+            }`}>
               {trendUp ? (
-                <TrendingUp className="h-4 w-4 text-white/80" />
+                <TrendingUp className="h-3 w-3" />
               ) : (
-                <TrendingDown className="h-4 w-4 text-white/80" />
+                <TrendingDown className="h-3 w-3" />
               )}
-              <span className="text-sm font-semibold">{trend}</span>
-            </>
+              <span>{trend}</span>
+            </div>
           )}
         </div>
-      </div>
-      
-      <div className="space-y-2">
-        <span className="text-2xl md:text-3xl font-bold block">{value}</span>
-        <p className="text-sm opacity-90 font-medium">{title}</p>
-      </div>
-
-      {/* Enhanced shine effect */}
-      <div className="absolute inset-0 rounded-3xl pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transform -skew-y-12 -translate-x-full group-hover:translate-x-full group-hover:opacity-20 transition duration-1000 ease-in-out"></div>
+        
+        {/* Value and Title */}
+        <div className="space-y-0">
+          <div className="text-2xl md:text-2xl font-bold text-gray-900">{value}</div>
+          <p className="text-sm text-gray-600 font-medium">{title}</p>
+        </div>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full opacity-20"></div>
-      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-white/5 rounded-full opacity-30"></div>
+      {/* Hover Effect Background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transform -translate-x-full hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"></div>
     </div>
   );
 }
 
-function Card({ children, className = "" }) {
+function Card({ children, className = "", dataAos, dataAosDelay, dataAosDuration, dataAosEasing }) {
   return (
     <div
-      className={`rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-xl ring-1 ring-gray-100/50 hover:shadow-2xl transition-all duration-300 border border-white/20 ${className}`}
+      className={`rounded-2xl bg-white shadow-lg ring-1 ring-gray-100 hover:shadow-xl transition-all duration-300 border border-gray-100 p-6 ${className}`}
+      data-aos={dataAos}
+      data-aos-delay={dataAosDelay}
+      data-aos-duration={dataAosDuration}
+      data-aos-easing={dataAosEasing}
     >
       {children}
     </div>
@@ -491,7 +548,7 @@ function Card({ children, className = "" }) {
 
 function CardTitle({ children }) {
   return (
-    <div className="mb-6 text-lg font-bold tracking-wide bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent flex items-center space-x-2">
+    <div className="mb-6 text-lg font-bold text-gray-800 flex items-center space-x-2">
       <span>{children}</span>
     </div>
   );

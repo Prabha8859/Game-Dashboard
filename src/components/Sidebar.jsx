@@ -48,181 +48,158 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
     setOpenSubDropdown(openSubDropdown === key ? null : key);
   };
 
+  const iconClass = "w-6 h-6 text-gray-600";
+
   const menuItems = [
     {
       name: "Dashboard",
       icon: <LayoutDashboard />,
       key: "dashboard",
       active: true,
-      iconColor: "text-blue-600",
-      bgColor: isDarkMode ? "bg-blue-900" : "bg-blue-50",
     },
     {
       name: "Referral",
       icon: <Users />,
       to: "/referral",
-      iconColor: "text-orange-600",
-      bgColor: isDarkMode ? "bg-orange-900" : "bg-orange-50",
       dropdown: true,
       subItems: [
-        { name: "Referral Links", to: "referralLinks", icon: <Link />, iconColor: "text-orange-500" },
-        { name: "Referral Earnings", to: "/referralEarnings", icon: <DollarSign />, iconColor: "text-orange-500" },
-        { name: "Referral Users", to: "/referralUsers", icon: <UserCheck />, iconColor: "text-orange-500" },
+        { name: "Referral Links", to: "referralLinks", icon: <Link /> },
+        { name: "Referral Earnings", to: "/referralEarnings", icon: <DollarSign /> },
+        { name: "Referral Users", to: "/referralUsers", icon: <UserCheck /> },
       ],
     },
     {
       name: "Manage Games",
       icon: <Gamepad2 />,
       key: "manageGames",
-      iconColor: "text-purple-600",
-      bgColor: isDarkMode ? "bg-purple-900" : "bg-purple-50",
       dropdown: true,
       subItems: [
         {
           name: "Ludo",
           key: "ludo",
           icon: <Dices />,
-          iconColor: "text-purple-500",
           dropdown: true,
           subItems: [
-             { name: "Admin Console", key: "reportludo", icon: <BarChart3 />, iconColor: "text-green-400" },
-             { name: "Player&Matches", key: "transectionludo", icon: <BarChart3 />, iconColor: "text-green-400" },
-            { name: "Wallet&Winner", key: "walletludo", icon: <Dices />, iconColor: "text-blue-400" },
-           
-            { name: "Game Ludo", key: "gameludo", icon: <BarChart3 />, iconColor: "text-green-400" },
-           
-            { name: "Users Ludo", key: "userludo", icon: <BarChart3 />, iconColor: "text-green-400" },
-             { name: "UserDate Ludo", key: "userdataludo", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "Admin Console", key: "reportludo", icon: <BarChart3 /> },
+            { name: "Player&Matches", key: "transectionludo", icon: <BarChart3 /> },
+            { name: "Wallet&Winner", key: "walletludo", icon: <Dices /> },
+            { name: "Game Ludo", key: "gameludo", icon: <BarChart3 /> },
+            { name: "Users Ludo", key: "userludo", icon: <BarChart3 /> },
+            { name: "UserDate Ludo", key: "userdataludo", icon: <Coins /> },
           ],
         },
         {
           name: "Jackpot",
           key: "jackpot",
           icon: <Coins />,
-          iconColor: "text-yellow-500",
           dropdown: true,
           subItems: [
-            { name: "Manage Jackpot", key: "mangejackpot", icon: <Coins />, iconColor: "text-orange-400" },
-            { name: "Settings Jackpot", key: "walletjackpot", icon: <Coins />, iconColor: "text-green-500" },
-            { name: "Logs Jackpot", key: "logsjackpot", icon: <Coins />, iconColor: "text-green-500" },
-            { name: "UserData Jackpot", key: "userdatajackpot", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "Manage Jackpot", key: "mangejackpot", icon: <Coins /> },
+            { name: "Settings Jackpot", key: "walletjackpot", icon: <Coins /> },
+            { name: "Logs Jackpot", key: "logsjackpot", icon: <Coins /> },
+            { name: "UserData Jackpot", key: "userdatajackpot", icon: <Coins /> },
           ],
         },
         {
-         name: "Mines",
+          name: "Mines",
           key: "mines",
           icon: <Bomb />,
-          iconColor: "text-red-500",
           dropdown: true,
           subItems: [
-            { name: "Game Montory", key: "mangemine", icon: <Bomb />, iconColor: "text-red-400" },
-            { name: "User Mangement", key: "walletMine", icon: <BarChart3 />, iconColor: "text-blue-400" },
-            { name: "Control Admin", key: "controladmin", icon: <BarChart3 />, iconColor: "text-blue-400" },
-            { name: "User Jackpot", key: "userdatamine", icon: <Coins />, iconColor: "text-blue-500" },
-            
+            { name: "Game Montory", key: "mangemine", icon: <Bomb /> },
+            { name: "User Mangement", key: "walletMine", icon: <BarChart3 /> },
+            { name: "Control Admin", key: "controladmin", icon: <BarChart3 /> },
+            { name: "User Jackpot", key: "userdatamine", icon: <Coins /> },
           ],
         },
         {
           name: "Teen Patti",
           key: "teenPatti",
           icon: <Play />,
-          iconColor: "text-green-500",
           dropdown: true,
           subItems: [
-            { name: "Teen Patti Rules", key: "mangeteenpatti", icon: <Play />, iconColor: "text-green-400" },
-            { name: "Transactions&Wallet ", key: "walletteenpatti", icon: <BarChart3 />, iconColor: "text-blue-400" },
-             { name: "User Jackpot", key: "userdatateenpatti", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "Teen Patti Rules", key: "mangeteenpatti", icon: <Play /> },
+            { name: "Transactions&Wallet ", key: "walletteenpatti", icon: <BarChart3 /> },
+            { name: "User Jackpot", key: "userdatateenpatti", icon: <Coins /> },
           ],
         },
         {
           name: "Lottery",
           key: "lottery",
           icon: <Coins />,
-          iconColor: "text-orange-500",
           dropdown: true,
           subItems: [
-            { name: "Manage Lottery", key: "allLottery", icon: <Coins />, iconColor: "text-orange-400" },
-            { name: "Wallet Lottery", key: "activeLottery", icon: <Coins />, iconColor: "text-green-500" },
-            { name: "User Lottery", key: "Resultslottery", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "Manage Lottery", key: "allLottery", icon: <Coins /> },
+            { name: "Wallet Lottery", key: "activeLottery", icon: <Coins /> },
+            { name: "User Lottery", key: "Resultslottery", icon: <Coins /> },
           ],
         },
         {
           name: "BirdShooting",
           key: "birdshooting",
           icon: <Coins />,
-          iconColor: "text-orange-500",
           dropdown: true,
           subItems: [
-            { name: "Lobby Mange", key: "lobbymange", icon: <Coins />, iconColor: "text-orange-400" },
-            { name: "Gaming Mange", key: "gamingbird", icon: <Coins />, iconColor: "text-green-500" },
-            { name: "UserData Mange", key: "userdata", icon: <Coins />, iconColor: "text-blue-500" },
+            { name: "Lobby Mange", key: "lobbymange", icon: <Coins /> },
+            { name: "Gaming Mange", key: "gamingbird", icon: <Coins /> },
+            { name: "UserData Mange", key: "userdata", icon: <Coins /> },
           ],
         },
-        { name: "Game Log", key: "gameLogs", icon: <ClipboardList />, iconColor: "text-purple-500" },
+        { name: "Game Log", key: "gameLogs", icon: <ClipboardList /> },
       ],
     },
     {
       name: "Manage Users",
       icon: <Users />,
       key: "manageUsers",
-      iconColor: "text-indigo-600",
-      bgColor: isDarkMode ? "bg-indigo-900" : "bg-indigo-50",
       dropdown: true,
       subItems: [
-        { name: "Active Users", key: "activeUsers", icon: <UserPlus />, iconColor: "text-indigo-500" },
-        { name: "Banned Users", key: "bannedUsers", icon: <UserX />, iconColor: "text-indigo-500" },
-        { name: "All Users", key: "allUsers", icon: <Users />, iconColor: "text-indigo-500" },
+        { name: "Active Users", key: "activeUsers", icon: <UserPlus /> },
+        { name: "Banned Users", key: "bannedUsers", icon: <UserX /> },
+        { name: "All Users", key: "allUsers", icon: <Users /> },
       ],
     },
     {
       name: "Deposits",
       icon: <CreditCard />,
       key: "deposits",
-      iconColor: "text-green-600",
-      bgColor: isDarkMode ? "bg-green-900" : "bg-green-50",
       dropdown: true,
       subItems: [
-        { name: "Pending Deposits", key: "pendingDeposits", icon: <Clock />, iconColor: "text-yellow-500" },
-        { name: "Approved Deposits", key: "approvedDeposits", icon: <CheckCircle />, iconColor: "text-green-500" },
-        { name: "Rejected Deposits", key: "rejectedDeposits", icon: <Ban />, iconColor: "text-red-500" },
-        { name: "All Deposits", key: "allDeposits", icon: <CreditCardIcon />, iconColor: "text-green-500" },
+        { name: "Pending Deposits", key: "pendingDeposits", icon: <Clock /> },
+        { name: "Approved Deposits", key: "approvedDeposits", icon: <CheckCircle /> },
+        { name: "Rejected Deposits", key: "rejectedDeposits", icon: <Ban /> },
+        { name: "All Deposits", key: "allDeposits", icon: <CreditCardIcon /> },
       ],
     },
     {
       name: "Withdrawals",
       icon: <Banknote />,
       key: "withdrawals",
-      iconColor: "text-emerald-600",
-      bgColor: isDarkMode ? "bg-emerald-900" : "bg-emerald-50",
       dropdown: true,
       subItems: [
-        { name: "Pending Withdrawals", key: "pendingWithdrawals", icon: <Clock />, iconColor: "text-yellow-500" },
-        { name: "Approved Withdrawals", key: "approvedWithdrawals", icon: <CheckCircle />, iconColor: "text-green-500" },
-        { name: "Rejected Withdrawals", key: "rejectedWithdrawals", icon: <Ban />, iconColor: "text-red-500" },
+        { name: "Pending Withdrawals", key: "pendingWithdrawals", icon: <Clock /> },
+        { name: "Approved Withdrawals", key: "approvedWithdrawals", icon: <CheckCircle /> },
+        { name: "Rejected Withdrawals", key: "rejectedWithdrawals", icon: <Ban /> },
       ],
     },
     {
       name: "Support Tickets",
       icon: <Headphones />,
       key: "supportTickets",
-      iconColor: "text-cyan-600",
-      bgColor: isDarkMode ? "bg-cyan-900" : "bg-cyan-50",
       dropdown: true,
       subItems: [
-        { name: "Open Tickets", key: "openTickets", icon: <Ticket />, iconColor: "text-cyan-500" },
-        { name: "Closed Tickets", key: "closedTickets", icon: <X />, iconColor: "text-gray-500" },
+        { name: "Open Tickets", key: "openTickets", icon: <Ticket /> },
+        { name: "Closed Tickets", key: "closedTickets", icon: <X /> },
       ],
     },
     {
       name: "Report",
       icon: <BarChart3 />,
       key: "report",
-      iconColor: "text-red-600",
-      bgColor: isDarkMode ? "bg-red-900" : "bg-red-50",
       dropdown: true,
       subItems: [
-        { name: "Daily Report", key: "dailyReport", icon: <FileText />, iconColor: "text-red-500" },
-        { name: "Monthly Report", key: "monthlyReport", icon: <FileText />, iconColor: "text-red-500" },
+        { name: "Daily Report", key: "dailyReport", icon: <FileText /> },
+        { name: "Monthly Report", key: "monthlyReport", icon: <FileText /> },
       ],
     },
   ];
@@ -256,9 +233,9 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
           }`}
         >
           {isCollapsed ? (
-            <Menu className={`w-6 h-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`} />
+            <Menu className="w-6 h-6 text-gray-600" />
           ) : (
-            <X className={`w-6 h-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`} />
+            <X className="w-6 h-6 text-gray-600" />
           )}
         </button>
       </div>
@@ -269,9 +246,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
             <li key={item.key}>
               <div
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                  item.active
-                    ? `${item.bgColor} ${item.iconColor}`
-                    : isDarkMode
+                  isDarkMode
                     ? "text-gray-300 hover:bg-gray-800"
                     : "text-gray-600 hover:bg-gray-50"
                 }`}
@@ -284,7 +259,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                 }}
               >
                 <div className="flex-shrink-0">
-                  {React.cloneElement(item.icon, { className: `w-6 h-6 ${item.iconColor}` })}
+                  {React.cloneElement(item.icon, { className: iconClass })}
                 </div>
                 <span
                   className={`font-medium transition-all duration-300 ${
@@ -296,9 +271,9 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                 {item.dropdown && !isCollapsed && (
                   <div className="ml-auto">
                     {openDropdown === item.key ? (
-                      <ChevronDown className="w-5 h-5" />
+                      <ChevronDown className={iconClass} />
                     ) : (
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className={iconClass} />
                     )}
                   </div>
                 )}
@@ -323,8 +298,8 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                           }
                         }}
                       >
-                        <div className={`w-6 h-6 flex items-center justify-center mr-2 ${subItem.iconColor}`}>
-                          {subItem.icon}
+                        <div className={`w-6 h-6 flex items-center justify-center mr-2 text-gray-600`}>
+                          {React.cloneElement(subItem.icon, { className: iconClass })}
                         </div>
                         <span className="flex-1">{subItem.name}</span>
                         {subItem.dropdown && (
@@ -337,7 +312,7 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                               openSubDropdown === subItem.key ? "rotate-90" : ""
                             }`}
                           >
-                            <ChevronRight className="w-4 h-4" />
+                            <ChevronRight className={iconClass} />
                           </span>
                         )}
                       </div>
@@ -354,8 +329,8 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
                                 }`}
                                 onClick={() => onMenuClick(nestedItem.key)}
                               >
-                                <div className={`w-6 h-6 flex items-center justify-center mr-2 ${nestedItem.iconColor}`}>
-                                  {nestedItem.icon}
+                                <div className={`w-6 h-6 flex items-center justify-center mr-2 text-gray-600`}>
+                                  {React.cloneElement(nestedItem.icon, { className: iconClass })}
                                 </div>
                                 <span>{nestedItem.name}</span>
                               </div>
@@ -376,5 +351,3 @@ const Sidebar = ({ onMenuClick, isDarkMode }) => {
 };
 
 export default Sidebar;
-
-

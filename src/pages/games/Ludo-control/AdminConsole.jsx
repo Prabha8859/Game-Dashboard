@@ -429,7 +429,7 @@ const LudoReportsAnalytics = () => {
                 </h2>
                 <Button
                   onClick={() => handleExportCSV("revenue")}
-                  className="bg-blue-500 text-white hover:bg-blue-600"
+                  className="bg-blue-500 text-white hover:bg-blue-600 flex items-center"
                 >
                   <Download size={16} className="mr-2" />
                   Export Data
@@ -482,7 +482,7 @@ const LudoReportsAnalytics = () => {
                   </h2>
                   <Button
                     onClick={() => handleExportCSV("players")}
-                    className="bg-green-500 text-white hover:bg-green-600"
+                    className="bg-green-500 text-white hover:bg-green-600 flex items-center"
                   >
                     <Download size={16} className="mr-2" />
                     Export
@@ -550,7 +550,7 @@ const LudoReportsAnalytics = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card>
               <CardContent>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">
+                <h2 className="text-sm font-semibold text-gray-800 dark:text-white mb-6 flex items-center space-x-2">
                   🎯 Win/Loss Distribution
                 </h2>
                 <ResponsiveContainer width="100%" height={280}>
@@ -628,12 +628,12 @@ const LudoReportsAnalytics = () => {
             <CardContent>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center mb-2 sm:mb-0">
-                  <AlertTriangle className="mr-3 text-red-500" />
+                  {/* <AlertTriangle className="mr-3 text-red-500" /> */}
                   🛡️ Fraud Detection & Abnormal Activity
                 </h2>
                 <Button
                   onClick={() => handleExportCSV("fraud")}
-                  className="bg-red-500 text-white hover:bg-red-600"
+                  className="bg-red-500 text-white hover:bg-red-600 flex items-center"
                 >
                   <Download size={16} className="mr-2" />
                   Export Report
@@ -668,7 +668,7 @@ const LudoReportsAnalytics = () => {
                         <td className="py-4 px-6 text-gray-600 dark:text-gray-300 border-b border-gray-100 dark:border-gray-800">
                           {alert.date}
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100 dark:border-gray-800">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 whitespace-nowrap">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(alert.status)}`}>
                             {alert.status}
                           </span>

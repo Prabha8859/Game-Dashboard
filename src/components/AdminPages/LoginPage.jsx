@@ -11,11 +11,9 @@ const LoginPage = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ username: "", password: "" });
 
-  // ✅ Loading Overlay
   const showLoading = () => setLoading(true);
   const hideLoading = () => setLoading(false);
 
-  // ✅ Confetti Animation
   const burstConfetti = (duration = 1500) => {
     const end = Date.now() + duration;
     (function frame() {
@@ -24,7 +22,7 @@ const LoginPage = ({ onLogin }) => {
       if (Date.now() < end) requestAnimationFrame(frame);
     })();
   };
-  
+
   const megaConfettiBlast = () => {
     confetti({
       particleCount: 160,
@@ -36,7 +34,6 @@ const LoginPage = ({ onLogin }) => {
     });
   };
 
-  // ✅ Success Modal
   const showSuccessModal = async () => {
     burstConfetti(2000);
     await Swal.fire({
@@ -74,33 +71,29 @@ const LoginPage = ({ onLogin }) => {
       },
       willClose: () => {
         megaConfettiBlast();
-        onLogin(); // ✅ Call onLogin to show Dashboard
+        onLogin();
       },
       timer: 2000,
     });
   };
 
-  // ✅ Handle Login with inline error messages
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    // Clear previous errors
     setErrors({ username: "", password: "" });
-    
-    // Validate fields
+
     let hasError = false;
     const newErrors = { username: "", password: "" };
-    
+
     if (!username) {
       newErrors.username = "Username is required!";
       hasError = true;
     }
-    
+
     if (!password) {
       newErrors.password = "Password is required!";
       hasError = true;
     }
-    
+
     if (hasError) {
       setErrors(newErrors);
       return;
@@ -113,7 +106,6 @@ const LoginPage = ({ onLogin }) => {
         setErrors({ username: "", password: "" });
         showSuccessModal();
       } else {
-        // Set error messages for invalid credentials
         if (username !== "p") {
           newErrors.username = "Invalid username! Use prabha@admin.com";
         }
@@ -125,20 +117,17 @@ const LoginPage = ({ onLogin }) => {
     }, 1500);
   };
 
-  // ✅ Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-white">
-      {/* Watermark */}
       <div
         className="absolute top-1/2 left-1/2 w-[600px] h-[600px] opacity-5 -rotate-12 -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-contain bg-no-repeat bg-center"
         style={{ backgroundImage: `url(${img1})` }}
       />
 
-      {/* Fixed Lottie bottom-right */}
       <dotlottie-wc
         src="https://lottie.host/fb8150c5-9965-403b-b4ca-3092cbc4ab74/xhSbRdFMwn.lottie"
         style={{
@@ -154,19 +143,17 @@ const LoginPage = ({ onLogin }) => {
         loop
       />
 
-      <div className="flex w-[900px] h-[500px] bg-white shadow-2xl rounded-2xl overflow-hidden relative z-10">
-        {/* Left panel with gaming background image */}
-        <div 
-          className="flex flex-col items-center justify-center flex-1 p-10 bg-gradient-to-t from-[#e6e9f0] to-[#eef1f5] text-[#DC2525] relative"
-        >
-          {/* Gaming background image with opacity */}
-          <div 
+      <div className="flex flex-col md:flex-row w-full max-w-4xl h-auto md:h-[500px] bg-white shadow-2xl rounded-2xl overflow-hidden relative z-10 mx-4">
+        {/* Left Panel - Displayed only on md and up */}
+        <div className="hidden md:flex flex-col items-center justify-center flex-1 p-10 bg-gradient-to-t from-[#e6e9f0] to-[#eef1f5] text-[#DC2525] relative">
+          <div
             className="absolute inset-0 opacity-20"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           />
           <dotlottie-wc
@@ -179,37 +166,40 @@ const LoginPage = ({ onLogin }) => {
             Yeh game toh bas naam ka hai 😉
           </h2>
           <p className="text-sm text-[#254D70] text-center">
-            Asli khel toh yaha admin panel me hota hai — jeet kiski hogi, hum tai karte hain! 😏
+            Asli khel toh yaha admin panel me hota hai — jeet kiski hogi, hum
+            tai karte hain! 😏
           </p>
         </div>
 
-        {/* Right panel with enhanced design and gaming background */}
-        <div 
-          className="flex flex-col flex-1 p-10 justify-center text-black relative"
-        >
-          {/* Gaming background image with opacity */}
-          <div 
+        {/* Right Panel - Login Form */}
+        <div className="flex flex-col flex-1 p-10 justify-center text-black relative">
+          <div
             className="absolute inset-0 opacity-20"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           />
-          {/* Glass morphism overlay */}
           <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
-          
+
           <div className="relative z-10">
-            <div className="bg-white/80 backdrop-blur-md rounded-xl p-8 shadow-lg border border-white/20">
-              <img src={img1} alt="Logo" className="w-24 mx-auto mb-4" />
-              <h2 className="text-center text-2xl font-bold text-[#561c46] mb-2">ADMIN LOGIN</h2>
+            <div className="bg-white/80 backdrop-blur-md rounded-xl p-8 shadow-lg border border-white/20 max-w-md mx-auto">
+              <img
+                src={img1}
+                alt="Logo"
+                className="w-24 mx-auto mb-4"
+              />
+              <h2 className="text-center text-2xl font-bold text-[#561c46] mb-2">
+                ADMIN LOGIN
+              </h2>
               <p className="text-center text-sm text-gray-600 mb-6">
                 See what is going on with your business
               </p>
 
               <form onSubmit={handleLogin}>
-                {/* Username field */}
                 <div className="mb-4">
                   <input
                     type="text"
@@ -218,15 +208,20 @@ const LoginPage = ({ onLogin }) => {
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
-                      if (errors.username) setErrors(prev => ({ ...prev, username: "" }));
+                      if (errors.username)
+                        setErrors((prev) => ({
+                          ...prev,
+                          username: "",
+                        }));
                     }}
                   />
                   {errors.username && (
-                    <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.username}
+                    </p>
                   )}
                 </div>
 
-                {/* Password field with eye icon */}
                 <div className="mb-4">
                   <div className="relative">
                     <input
@@ -236,7 +231,11 @@ const LoginPage = ({ onLogin }) => {
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
-                        if (errors.password) setErrors(prev => ({ ...prev, password: "" }));
+                        if (errors.password)
+                          setErrors((prev) => ({
+                            ...prev,
+                            password: "",
+                          }));
                       }}
                     />
                     <button
@@ -245,19 +244,46 @@ const LoginPage = ({ onLogin }) => {
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                     >
                       {showPassword ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                          />
                         </svg>
                       ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
                         </svg>
                       )}
                     </button>
                   </div>
                   {errors.password && (
-                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password}
+                    </p>
                   )}
                 </div>
 
@@ -283,7 +309,6 @@ const LoginPage = ({ onLogin }) => {
         </div>
       </div>
 
-      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 bg-white/95 flex items-center justify-center z-50">
           <dotlottie-wc

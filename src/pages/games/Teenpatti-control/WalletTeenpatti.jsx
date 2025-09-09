@@ -6,17 +6,17 @@ import React, { useState, useEffect } from "react";
 
 // Re-implementing shadcn/ui components with simple Tailwind CSS and Divs
 const Card = ({ children, className }) => (
-  <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}>
+  <div className={`rounded-lg border bg-white text-card-foreground shadow-sm ${className}`}>
     {children}
   </div>
 );
 const CardHeader = ({ children, className }) => (
-  <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>
+  <div className={`flex flex-col space-y-1.5 p-4 ${className}`}>
     {children}
   </div>
 );
 const CardTitle = ({ children, className }) => (
-  <h3 className={`font-semibold tracking-tight text-xl ${className}`}>
+  <h3 className={`font-semibold tracking-tight text-lg ${className}`}>
     {children}
   </h3>
 );
@@ -26,7 +26,7 @@ const CardDescription = ({ children, className }) => (
   </p>
 );
 const CardContent = ({ children, className }) => (
-  <div className={`p-6 pt-0 ${className}`}>
+  <div className={`p-4 pt-0 ${className}`}>
     {children}
   </div>
 );
@@ -99,34 +99,22 @@ const Input = ({ className, ...props }) => (
   />
 );
 
-const Select = ({ value, onValueChange, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="relative">
-      <div onClick={() => setIsOpen(!isOpen)}>{children[0]}</div>
-      {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-popover border rounded-md shadow-lg">{children[1]}</div>
-      )}
-    </div>
-  );
-};
-const SelectTrigger = ({ children, className }) => (
-  <div className={`flex h-9 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 ${className}`}>
-    {children}
-  </div>
-);
-const SelectValue = ({ placeholder }) => <span>{placeholder}</span>;
-const SelectContent = ({ children }) => <div>{children}</div>;
-const SelectItem = ({ value, children, onSelect }) => (
-  <div
-    className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-    onClick={() => onSelect(value)}
+const Select = ({ value, onValueChange, children, placeholder, className }) => (
+  <select
+    value={value}
+    onChange={(e) => onValueChange(e.target.value)}
+    className={`flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${className}`}
   >
+    <option value="all" disabled>{placeholder}</option>
     {children}
-  </div>
+  </select>
 );
 
-const Tabs = ({ children, defaultValue, ...props }) => {
+const SelectItem = ({ value, children }) => (
+  <option value={value}>{children}</option>
+);
+
+const Tabs = ({ children, defaultValue, className }) => {
   const [activeTab, setActiveTab] = useState(defaultValue);
   const tabsWithProps = React.Children.map(children, child => {
     if (child.type === TabsList) {
@@ -137,26 +125,29 @@ const Tabs = ({ children, defaultValue, ...props }) => {
     }
     return child;
   });
-  return <div {...props}>{tabsWithProps}</div>;
+  return <div className={className}>{tabsWithProps}</div>;
 };
+
 const TabsList = ({ children, activeTab, setActiveTab, className }) => (
-  <div className={`inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground ${className}`}>
+  <div className={`flex border-b border-gray-200 ${className}`}>
     {React.Children.map(children, child =>
       React.cloneElement(child, { activeTab, setActiveTab })
     )}
   </div>
 );
+
 const TabsTrigger = ({ children, value, activeTab, setActiveTab }) => (
   <button
     onClick={() => setActiveTab(value)}
-    className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow ${value === activeTab ? 'data-[state=active]' : ''}`}
+    className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 focus:outline-none ${value === activeTab ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
   >
     {children}
   </button>
 );
+
 const TabsContent = ({ children, value, activeTab }) => (
   <div
-    className={`mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${value !== activeTab ? 'hidden' : ''}`}
+    className={`mt-2 ${value !== activeTab ? 'hidden' : ''}`}
   >
     {children}
   </div>
@@ -171,12 +162,12 @@ const TableHeader = ({ children, className }) => <thead className={`[&_tr]:borde
 const TableBody = ({ children, className }) => <tbody className={`[&_tr:last-child]:border-0 ${className}`}>{children}</tbody>;
 const TableRow = ({ children, className }) => <tr className={`border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted ${className}`}>{children}</tr>;
 const TableHead = ({ children, className }) => (
-  <th className={`h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] ${className}`}>
+  <th className={`h-10 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 ${className}`}>
     {children}
   </th>
 );
 const TableCell = ({ children, className }) => (
-  <td className={`p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] ${className}`}>
+  <td className={`p-4 align-middle [&:has([role=checkbox])]:pr-0 ${className}`}>
     {children}
   </td>
 );
@@ -185,21 +176,22 @@ const TableCell = ({ children, className }) => (
 const ArrowUpCircle = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <circle cx="12" cy="12" r="10" />
-    <path d="m12 16-4-4h8l-4-4" />
+    <path d="m16 12-4-4-4 4" />
   </svg>
 );
 const ArrowDownCircle = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <circle cx="12" cy="12" r="10" />
-    <path d="m12 8 4 4-4 4-4-4" />
+    <path d="m8 12 4 4 4-4" />
   </svg>
 );
 const Gamepad2 = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M6 12h4m-2-2v4" />
-    <path d="M15 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-    <path d="M18 15a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-    <rect width="20" height="12" x="2" y="6" rx="2" ry="2" />
+    <line x1="6" x2="10" y1="12" y2="12" />
+    <line x1="8" x2="8" y1="10" y2="14" />
+    <line x1="15" x2="15.01" y1="13" y2="13" />
+    <line x1="18" x2="18.01" y1="11" y2="11" />
+    <rect width="20" height="12" x="2" y="6" rx="2" />
   </svg>
 );
 const Percent = (props) => (
@@ -211,11 +203,11 @@ const Percent = (props) => (
 );
 const Trophy = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M20 9a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2z" />
-    <path d="M12 18v3" />
-    <path d="M17 18h2" />
-    <path d="M5 18h2" />
-    <path d="M12 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V16c0 .55-.47.98-.97 1.21C7.85 17.75 7 18.24 7 19v1c0 .27.2.55.5.74.3.2.8.26 1.1.26M14 14.66V16c0 .55.47.98.97 1.21C16.15 17.75 17 18.24 17 19v1c0 .27-.2.55-.5.74-.3.2-.8.26-1.1.26" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
   </svg>
 );
 const Clock = (props) => (
@@ -244,8 +236,8 @@ const Download = (props) => (
 );
 const CheckCircle = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-8.8" />
-    <path d="M22 4 12 14.01l-3-3" />
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <polyline points="22 4 12 14.01 9 11.01" />
   </svg>
 );
 const XCircle = (props) => (
@@ -420,13 +412,13 @@ const fetchTransactions = async () => {
 
 export default function App() {
   const [transactions, setTransactions] = useState(null);
+  const [summaries, setSummaries] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
-  const [activeTab, setActiveTab] = useState("deposits");
   const [filteredData, setFilteredData] = useState(null);
 
   // useEffect to fetch the mock data once on component mount
@@ -443,6 +435,24 @@ export default function App() {
     };
     fetchData();
   }, []);
+
+  // Calculate summaries dynamically
+  useEffect(() => {
+    if (transactions) {
+      const todayDeposits = transactions.deposits.reduce((sum, t) => sum + t.amount, 0);
+      const todayWithdrawals = transactions.withdrawals.reduce((sum, t) => sum + t.amount, 0);
+      const commissionEarned = transactions.commissions.reduce((sum, c) => sum + c.amount, 0);
+      const pendingCount = transactions.deposits.filter(t => t.status === 'pending').length +
+        transactions.withdrawals.filter(t => t.status === 'pending').length;
+
+      setSummaries({
+        deposits: { amount: todayDeposits, count: transactions.deposits.length },
+        withdrawals: { amount: todayWithdrawals, count: transactions.withdrawals.length },
+        commission: { amount: commissionEarned, count: transactions.commissions.length },
+        pending: pendingCount,
+      });
+    }
+  }, [transactions]);
 
   // useEffect to handle filtering whenever search or filter states change
   useEffect(() => {
@@ -511,16 +521,16 @@ export default function App() {
   const getStatusBadge = (status) => {
     switch (status) {
       case "completed":
-        return <Badge className="bg-green-600 text-white">Completed</Badge>;
+        return <Badge className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
       case "pending":
       case "processing":
-        return <Badge className="bg-yellow-600 text-white">Pending</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
       case "rejected":
-        return <Badge variant="destructive">Rejected</Badge>;
+        return <Badge className="bg-red-100 text-red-800 border-red-200">Rejected</Badge>;
       case "active":
-        return <Badge className="bg-blue-600 text-white">Active</Badge>;
+        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Active</Badge>;
       case "settled":
-        return <Badge variant="secondary">Settled</Badge>;
+        return <Badge className="bg-gray-100 text-gray-800 border-gray-200">Settled</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -529,11 +539,11 @@ export default function App() {
   const getResultBadge = (result) => {
     switch (result) {
       case "won":
-        return <Badge className="bg-green-600 text-white">Won</Badge>;
+        return <Badge className="bg-green-100 text-green-800 border-green-200">Won</Badge>;
       case "lost":
-        return <Badge variant="destructive">Lost</Badge>;
+        return <Badge className="bg-red-100 text-red-800 border-red-200">Lost</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-600 text-white">Pending</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
       default:
         return <Badge variant="outline">{result}</Badge>;
     }
@@ -543,7 +553,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         <p className="ml-4 text-gray-700 font-medium">Loading data...</p>
       </div>
     );
@@ -561,18 +571,18 @@ export default function App() {
   }
 
   return (
-    <div className="p-4 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900">
             Transactions & Wallet Management
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mt-1">
             Track all money movements and financial activities
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -584,9 +594,9 @@ export default function App() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards - Smaller with top border color */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-lg">
+        <Card className="border-t-4 border-green-600">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Deposits Today
@@ -594,12 +604,12 @@ export default function App() {
             <ArrowUpCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">₹17,500</div>
-            <p className="text-xs text-gray-500">3 transactions</p>
+            <div className="text-xl font-bold text-green-600">₹{summaries.deposits?.amount.toLocaleString()}</div>
+            <p className="text-xs text-gray-500">{summaries.deposits?.count} transactions</p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-lg">
+        <Card className="border-t-4 border-red-600">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Withdrawals Today
@@ -607,12 +617,12 @@ export default function App() {
             <ArrowDownCircle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">₹25,700</div>
-            <p className="text-xs text-gray-500">3 transactions</p>
+            <div className="text-xl font-bold text-red-600">₹{summaries.withdrawals?.amount.toLocaleString()}</div>
+            <p className="text-xs text-gray-500">{summaries.withdrawals?.count} transactions</p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-lg">
+        <Card className="border-t-4 border-blue-600">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Commission Earned
@@ -620,12 +630,12 @@ export default function App() {
             <Percent className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">₹4,390</div>
-            <p className="text-xs text-gray-500">From 3 tables</p>
+            <div className="text-xl font-bold text-blue-600">₹{summaries.commission?.amount.toLocaleString()}</div>
+            <p className="text-xs text-gray-500">From {summaries.commission?.count} tables</p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-lg">
+        <Card className="border-t-4 border-yellow-600">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Pending Approvals
@@ -633,19 +643,20 @@ export default function App() {
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
-              {filteredData?.pending?.length || 0}
+            <div className="text-xl font-bold text-yellow-600">
+              {summaries.pending}
             </div>
             <p className="text-xs text-gray-500">Requires action</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
+      {/* Filters - Improved layout */}
       <Card className="rounded-lg">
-        <CardContent className="pt-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <CardContent className="pt-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end">
             <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
@@ -656,38 +667,34 @@ export default function App() {
                 />
               </div>
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-[180px] rounded-md">
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all" onSelect={() => setStatusFilter("all")}>All Status</SelectItem>
-                <SelectItem value="completed" onSelect={() => setStatusFilter("completed")}>Completed</SelectItem>
-                <SelectItem value="pending" onSelect={() => setStatusFilter("pending")}>Pending</SelectItem>
-                <SelectItem value="processing" onSelect={() => setStatusFilter("processing")}>Processing</SelectItem>
-                <SelectItem value="rejected" onSelect={() => setStatusFilter("rejected")}>Rejected</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={dateFilter} onValueChange={setDateFilter}>
-              <SelectTrigger className="w-full md:w-[180px] rounded-md">
-                <SelectValue placeholder="Filter by date" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all" onSelect={() => setDateFilter("all")}>All Dates</SelectItem>
-                <SelectItem value="today" onSelect={() => setDateFilter("today")}>Today</SelectItem>
-                <SelectItem value="yesterday" onSelect={() => setDateFilter("yesterday")}>Yesterday</SelectItem>
-                <SelectItem value="week" onSelect={() => setDateFilter("week")}>This Week</SelectItem>
-                <SelectItem value="month" onSelect={() => setDateFilter("month")}>This Month</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="w-full md:w-[180px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Filter by status</label>
+              <Select value={statusFilter} onValueChange={setStatusFilter} placeholder="Filter by status">
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="processing">Processing</SelectItem>
+                <SelectItem value="rejected">Rejected</SelectItem>
+              </Select>
+            </div>
+            <div className="w-full md:w-[180px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Filter by date</label>
+              <Select value={dateFilter} onValueChange={setDateFilter} placeholder="Filter by date">
+                <SelectItem value="all">All Dates</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="yesterday">Yesterday</SelectItem>
+                <SelectItem value="week">This Week</SelectItem>
+                <SelectItem value="month">This Month</SelectItem>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Transactions Tabs */}
+      {/* Transactions Tabs - Improved with underline design */}
       {filteredData && (
-        <Tabs defaultValue="deposits" className="space-y-4 rounded-lg">
-          <TabsList className="grid w-full grid-cols-6">
+        <Tabs defaultValue="deposits" className="space-y-4">
+          <TabsList>
             <TabsTrigger value="deposits">Deposits</TabsTrigger>
             <TabsTrigger value="withdrawals">Withdrawals</TabsTrigger>
             <TabsTrigger value="bets">Bets</TabsTrigger>
@@ -722,12 +729,10 @@ export default function App() {
                     {filteredData.deposits.length > 0 ? (
                       filteredData.deposits.map((transaction) => (
                         <TableRow key={transaction.id}>
-                          <TableCell className="font-mono">{transaction.id}</TableCell>
+                          <TableCell className="font-mono text-sm">{transaction.id}</TableCell>
                           <TableCell>
-                            <div>
-                              <div className="font-medium">{transaction.userName}</div>
-                              <div className="text-sm text-gray-500">{transaction.userId}</div>
-                            </div>
+                            <div className="font-medium">{transaction.userName}</div>
+                            <div className="text-xs text-gray-500">{transaction.userId}</div>
                           </TableCell>
                           <TableCell className="font-semibold text-green-600">
                             ₹{transaction.amount.toLocaleString()}
@@ -739,11 +744,11 @@ export default function App() {
                             <div className="flex gap-2">
                               {transaction.status === "pending" && (
                                 <>
-                                  <Button size="sm" variant="outline" className="h-8 bg-transparent">
+                                  <Button size="sm" variant="outline" className="h-8">
                                     <CheckCircle className="h-3 w-3 mr-1" />
                                     Approve
                                   </Button>
-                                  <Button size="sm" variant="outline" className="h-8 bg-transparent">
+                                  <Button size="sm" variant="outline" className="h-8">
                                     <XCircle className="h-3 w-3 mr-1" />
                                     Reject
                                   </Button>
@@ -755,7 +760,7 @@ export default function App() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center text-gray-500">
+                        <TableCell colSpan={7} className="text-center text-gray-500 py-6">
                           No deposits found.
                         </TableCell>
                       </TableRow>
@@ -792,12 +797,10 @@ export default function App() {
                     {filteredData.withdrawals.length > 0 ? (
                       filteredData.withdrawals.map((transaction) => (
                         <TableRow key={transaction.id}>
-                          <TableCell className="font-mono">{transaction.id}</TableCell>
+                          <TableCell className="font-mono text-sm">{transaction.id}</TableCell>
                           <TableCell>
-                            <div>
-                              <div className="font-medium">{transaction.userName}</div>
-                              <div className="text-sm text-gray-500">{transaction.userId}</div>
-                            </div>
+                            <div className="font-medium">{transaction.userName}</div>
+                            <div className="text-xs text-gray-500">{transaction.userId}</div>
                           </TableCell>
                           <TableCell className="font-semibold text-red-600">
                             ₹{transaction.amount.toLocaleString()}
@@ -809,11 +812,11 @@ export default function App() {
                             <div className="flex gap-2">
                               {transaction.status === "pending" && (
                                 <>
-                                  <Button size="sm" variant="outline" className="h-8 bg-transparent">
+                                  <Button size="sm" variant="outline" className="h-8">
                                     <CheckCircle className="h-3 w-3 mr-1" />
                                     Approve
                                   </Button>
-                                  <Button size="sm" variant="outline" className="h-8 bg-transparent">
+                                  <Button size="sm" variant="outline" className="h-8">
                                     <XCircle className="h-3 w-3 mr-1" />
                                     Reject
                                   </Button>
@@ -825,7 +828,7 @@ export default function App() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center text-gray-500">
+                        <TableCell colSpan={7} className="text-center text-gray-500 py-6">
                           No withdrawals found.
                         </TableCell>
                       </TableRow>
@@ -862,14 +865,12 @@ export default function App() {
                     {filteredData.bets.length > 0 ? (
                       filteredData.bets.map((bet) => (
                         <TableRow key={bet.id}>
-                          <TableCell className="font-mono">{bet.id}</TableCell>
+                          <TableCell className="font-mono text-sm">{bet.id}</TableCell>
                           <TableCell>
-                            <div>
-                              <div className="font-medium">{bet.userName}</div>
-                              <div className="text-sm text-gray-500">{bet.userId}</div>
-                            </div>
+                            <div className="font-medium">{bet.userName}</div>
+                            <div className="text-xs text-gray-500">{bet.userId}</div>
                           </TableCell>
-                          <TableCell className="font-mono">{bet.tableId}</TableCell>
+                          <TableCell className="font-mono text-sm">{bet.tableId}</TableCell>
                           <TableCell className="font-semibold">₹{bet.amount.toLocaleString()}</TableCell>
                           <TableCell>{getStatusBadge(bet.status)}</TableCell>
                           <TableCell>{getResultBadge(bet.result)}</TableCell>
@@ -878,7 +879,7 @@ export default function App() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center text-gray-500">
+                        <TableCell colSpan={7} className="text-center text-gray-500 py-6">
                           No bets found.
                         </TableCell>
                       </TableRow>
@@ -914,8 +915,8 @@ export default function App() {
                     {filteredData.commissions.length > 0 ? (
                       filteredData.commissions.map((commission) => (
                         <TableRow key={commission.id}>
-                          <TableCell className="font-mono">{commission.id}</TableCell>
-                          <TableCell className="font-mono">{commission.tableId}</TableCell>
+                          <TableCell className="font-mono text-sm">{commission.id}</TableCell>
+                          <TableCell className="font-mono text-sm">{commission.tableId}</TableCell>
                           <TableCell>₹{commission.totalBets.toLocaleString()}</TableCell>
                           <TableCell>{commission.commissionRate}%</TableCell>
                           <TableCell className="font-semibold text-blue-600">
@@ -926,7 +927,7 @@ export default function App() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center text-gray-500">
+                        <TableCell colSpan={6} className="text-center text-gray-500 py-6">
                           No commissions found.
                         </TableCell>
                       </TableRow>
@@ -962,14 +963,12 @@ export default function App() {
                     {filteredData.payouts.length > 0 ? (
                       filteredData.payouts.map((payout) => (
                         <TableRow key={payout.id}>
-                          <TableCell className="font-mono">{payout.id}</TableCell>
+                          <TableCell className="font-mono text-sm">{payout.id}</TableCell>
                           <TableCell>
-                            <div>
-                              <div className="font-medium">{payout.userName}</div>
-                              <div className="text-sm text-gray-500">{payout.userId}</div>
-                            </div>
+                            <div className="font-medium">{payout.userName}</div>
+                            <div className="text-xs text-gray-500">{payout.userId}</div>
                           </TableCell>
-                          <TableCell className="font-mono">{payout.betId}</TableCell>
+                          <TableCell className="font-mono text-sm">{payout.betId}</TableCell>
                           <TableCell className="font-semibold text-green-600">
                             ₹{payout.amount.toLocaleString()}
                           </TableCell>
@@ -979,7 +978,7 @@ export default function App() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center text-gray-500">
+                        <TableCell colSpan={6} className="text-center text-gray-500 py-6">
                           No payouts found.
                         </TableCell>
                       </TableRow>
@@ -1015,12 +1014,10 @@ export default function App() {
                       <TableBody>
                         {filteredData.pending.map((transaction) => (
                           <TableRow key={transaction.id}>
-                            <TableCell className="font-mono">{transaction.id}</TableCell>
+                            <TableCell className="font-mono text-sm">{transaction.id}</TableCell>
                             <TableCell>
-                              <div>
-                                <div className="font-medium">{transaction.userName}</div>
-                                <div className="text-sm text-gray-500">{transaction.userId}</div>
-                              </div>
+                              <div className="font-medium">{transaction.userName}</div>
+                              <div className="text-xs text-gray-500">{transaction.userId}</div>
                             </TableCell>
                             <TableCell className={`font-semibold ${transaction.id.startsWith('DEP') ? 'text-green-600' : 'text-red-600'}`}>
                               ₹{transaction.amount.toLocaleString()}
@@ -1043,7 +1040,7 @@ export default function App() {
                       </TableBody>
                     </Table>
                   ) : (
-                    <p className="text-center text-gray-500">
+                    <p className="text-center text-gray-500 py-6">
                       No pending transactions found.
                     </p>
                   )}

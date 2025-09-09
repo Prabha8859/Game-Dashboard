@@ -38,6 +38,7 @@ const statsCards = [
     value: 342,
     icon: Users,
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    borderColor: "#667eea",
     trend: "+12%",
     trendUp: true,
   },
@@ -46,6 +47,7 @@ const statsCards = [
     value: 28,
     icon: Play,
     gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    borderColor: "#f093fb",
     trend: "+5",
     trendUp: true,
   },
@@ -54,6 +56,7 @@ const statsCards = [
     value: "₹2,34,500",
     icon: Target,
     gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    borderColor: "#4facfe",
     trend: "+18.5%",
     trendUp: true,
   },
@@ -62,6 +65,7 @@ const statsCards = [
     value: "₹23,450",
     icon: DollarSign,
     gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+    borderColor: "#43e97b",
     trend: "+₹3,200",
     trendUp: true,
   },
@@ -70,6 +74,7 @@ const statsCards = [
     value: "₹45,000",
     icon: Crown,
     gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+    borderColor: "#fa709a",
     trend: "RajKing99",
     trendUp: true,
   },
@@ -78,6 +83,7 @@ const statsCards = [
     value: "₹5,20,000",
     icon: TrendingUp,
     gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+    borderColor: "#a8edea",
     trend: "+15.2%",
     trendUp: true,
   },
@@ -155,17 +161,17 @@ const fraudAlerts = [
 ];
 
 // ---- COMPONENTS ----
-const StatCard = ({ title, value, icon: Icon, gradient, trend, trendUp }) => (
+const StatCard = ({ title, value, icon: Icon, gradient, borderColor, trend, trendUp }) => (
   <div
-    className="relative p-4 rounded-xl text-white shadow-lg transform transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden group"
-    style={{ backgroundImage: gradient }}
+    className="relative p-4 rounded-xl bg-white shadow-lg transform transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden group border-t-4"
+    style={{ borderTopColor: borderColor }}
   >
     <div className="flex items-center justify-between mb-2">
-      <div className="p-2 bg-white/20 rounded-lg">
-        <Icon className="w-5 h-5" />
+      <div className="p-2 rounded-lg" style={{ backgroundColor: borderColor + '20' }}>
+        <Icon className="w-5 h-5" style={{ color: borderColor }} />
       </div>
       {trend && (
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-1" style={{ color: borderColor }}>
           {trendUp && <TrendingUp className="h-3 w-3" />}
           <span className="text-xs font-semibold">{trend}</span>
         </div>
@@ -173,23 +179,23 @@ const StatCard = ({ title, value, icon: Icon, gradient, trend, trendUp }) => (
     </div>
     
     <div className="space-y-1">
-      <span className="text-xl md:text-2xl font-bold block">{value}</span>
-      <p className="text-xs opacity-90">{title}</p>
+      <span className="text-xl md:text-2xl font-bold block text-gray-800">{value}</span>
+      <p className="text-xs text-gray-600">{title}</p>
     </div>
 
-    <div className="absolute -top-2 -right-2 w-16 h-16 bg-white/10 rounded-full opacity-20"></div>
+    <div className="absolute -top-2 -right-2 w-16 h-16 rounded-full opacity-10" style={{ backgroundColor: borderColor }}></div>
   </div>
 );
 
-const Card = ({ children, className = "" }) => (
-  <div className={`rounded-xl bg-white shadow-lg p-4 border border-gray-100 ${className}`}>
+const Card = ({ children, className = "", borderColor = "#3b82f6" }) => (
+  <div className={`rounded-xl bg-white shadow-lg p-4 border-t-4 ${className}`} style={{ borderTopColor: borderColor }}>
     {children}
   </div>
 );
 
-const CardTitle = ({ children, icon: Icon }) => (
+const CardTitle = ({ children, icon: Icon, color = "#3b82f6" }) => (
   <div className="mb-4 text-lg font-bold text-gray-700 flex items-center space-x-2">
-    {Icon && <Icon className="w-5 h-5" />}
+    {Icon && <Icon className="w-5 h-5" style={{ color }} />}
     <span>{children}</span>
   </div>
 );
@@ -252,8 +258,8 @@ const TeenPattiDashboard = () => {
         </div>
 
         {/* Live Tables */}
-        <Card className="mb-6">
-          <CardTitle icon={Gamepad2}>Live Tables Status</CardTitle>
+        <Card className="mb-6" borderColor="#10b981">
+          <CardTitle icon={Gamepad2} color="#10b981">Live Tables Status</CardTitle>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -285,8 +291,8 @@ const TeenPattiDashboard = () => {
         </Card>
 
         {/* Recent Rounds */}
-        <Card className="mb-6">
-          <CardTitle icon={Clock}>Recent Game Results</CardTitle>
+        <Card className="mb-6" borderColor="#f59e0b">
+          <CardTitle icon={Clock} color="#f59e0b">Recent Game Results</CardTitle>
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {recentRounds.map((round, index) => (
               <div key={round.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
@@ -317,15 +323,15 @@ const TeenPattiDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           
           {/* Players Growth */}
-          <Card>
-            <CardTitle icon={Activity}>Monthly Player Growth</CardTitle>
+          <Card borderColor="#8b5cf6">
+            <CardTitle icon={Activity} color="#8b5cf6">Monthly Player Growth</CardTitle>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyData}>
                   <defs>
                     <linearGradient id="playerGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -335,7 +341,7 @@ const TeenPattiDashboard = () => {
                   <Area
                     type="monotone"
                     dataKey="players"
-                    stroke="#3b82f6"
+                    stroke="#8b5cf6"
                     strokeWidth={3}
                     fill="url(#playerGradient)"
                     dot={{ r: 4 }}
@@ -346,8 +352,8 @@ const TeenPattiDashboard = () => {
           </Card>
 
           {/* Hand Types */}
-          <Card>
-            <CardTitle icon={Star}>Hand Types Distribution</CardTitle>
+          <Card borderColor="#f97316">
+            <CardTitle icon={Star} color="#f97316">Hand Types Distribution</CardTitle>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -376,8 +382,8 @@ const TeenPattiDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           
           {/* Revenue Chart */}
-          <Card>
-            <CardTitle icon={DollarSign}>Revenue & Commission</CardTitle>
+          <Card borderColor="#06b6d4">
+            <CardTitle icon={DollarSign} color="#06b6d4">Revenue & Commission</CardTitle>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={monthlyData}>
@@ -397,7 +403,7 @@ const TeenPattiDashboard = () => {
                   <Line 
                     type="monotone" 
                     dataKey="commission" 
-                    stroke="#3b82f6" 
+                    stroke="#06b6d4" 
                     strokeWidth={3}
                     dot={{ r: 4 }}
                     name="Commission"
@@ -408,8 +414,8 @@ const TeenPattiDashboard = () => {
           </Card>
 
           {/* Top Players */}
-          <Card>
-            <CardTitle icon={Crown}>Top Players Leaderboard</CardTitle>
+          <Card borderColor="#ec4899">
+            <CardTitle icon={Crown} color="#ec4899">Top Players Leaderboard</CardTitle>
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {topPlayers.map((player, index) => (
                 <div key={player.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg">
@@ -442,8 +448,8 @@ const TeenPattiDashboard = () => {
         </div>
 
         {/* Fraud Alerts */}
-        <Card className="mb-6">
-          <CardTitle icon={AlertTriangle}>Security Alerts</CardTitle>
+        <Card className="mb-6" borderColor="#ef4444">
+          <CardTitle icon={AlertTriangle} color="#ef4444">Security Alerts</CardTitle>
           <div className="space-y-3">
             {fraudAlerts.map((alert) => (
               <div key={alert.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-200">

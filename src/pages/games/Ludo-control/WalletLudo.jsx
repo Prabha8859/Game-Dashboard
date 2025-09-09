@@ -246,25 +246,25 @@ const ComprehensiveWalletSystem = () => {
           </button>
         </div>
       </section>
-      <section className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+      <section className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 overflow-x-auto max-w-[850px]">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 whitespace-nowrap ">
             <Eye className="w-5 h-5" />
             User Management ({filteredUsers.length})
           </h2>
-          <div className="flex flex-col md:flex-row gap-3">
+          <div className="flex flex-col md:flex-row gap-3 ">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-5 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search users..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="pl-10 pr-5 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <select
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none h-10"
               value={filterBalance}
               onChange={(e) => setFilterBalance(e.target.value)}
             >
@@ -275,14 +275,14 @@ const ComprehensiveWalletSystem = () => {
             </select>
             <button
               onClick={() => handleExport("csv")}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center gap-2"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center gap-2 whitespace-nowrap"
             >
               <Download className="w-4 h-4" />
               Export CSV
             </button>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="">
           <table className="w-full table-auto text-left">
             <thead>
               <tr className="text-sm text-gray-700 border-b-2 border-gray-200 bg-gray-50">

@@ -12,6 +12,7 @@
   "dependencies": {
     "@lottiefiles/dotlottie-wc": "^0.7.2",
     "@tailwindcss/vite": "^4.1.12",
+    "aos": "^2.3.4",
     "canvas-confetti": "^1.9.3",
     "chart.js": "^4.5.0",
     "lucide-react": "^0.542.0",

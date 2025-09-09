@@ -107,66 +107,6 @@ const MinesDashboard = () => {
       time: "5 mins ago",
       profit: -2400
     },
-    // { 
-    //   id: "R2024004", 
-    //   user: "RiskTaker", 
-    //   bet: 3000, 
-    //   mines: 10, 
-    //   tilesRevealed: 6, 
-    //   result: "Loss", 
-    //   payout: 0, 
-    //   multiplier: "0x",
-    //   time: "7 mins ago",
-    //   profit: 3000
-    // },
-    // { 
-    //   id: "R2024005", 
-    //   user: "SafePlayer", 
-    //   bet: 500, 
-    //   mines: 2, 
-    //   tilesRevealed: 5, 
-    //   result: "Win", 
-    //   payout: 650, 
-    //   multiplier: "1.3x",
-    //   time: "8 mins ago",
-    //   profit: -150
-    // },
-    // { 
-    //   id: "R2024006", 
-    //   user: "BigBetter", 
-    //   bet: 4500, 
-    //   mines: 7, 
-    //   tilesRevealed: 3, 
-    //   result: "Loss", 
-    //   payout: 0, 
-    //   multiplier: "0x",
-    //   time: "10 mins ago",
-    //   profit: 4500
-    // },
-    // { 
-    //   id: "R2024007", 
-    //   user: "ProGamer", 
-    //   bet: 1800, 
-    //   mines: 4, 
-    //   tilesRevealed: 9, 
-    //   result: "Win", 
-    //   payout: 2700, 
-    //   multiplier: "1.5x",
-    //   time: "12 mins ago",
-    //   profit: -900
-    // },
-    // { 
-    //   id: "R2024008", 
-    //   user: "NewBie", 
-    //   bet: 150, 
-    //   mines: 1, 
-    //   tilesRevealed: 3, 
-    //   result: "Win", 
-    //   payout: 180, 
-    //   multiplier: "1.2x",
-    //   time: "15 mins ago",
-    //   profit: -30
-    // }
   ]);
 
   // Win/Loss pie chart data
@@ -203,378 +143,418 @@ const MinesDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 p-6">
-       <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-3xl shadow-2xl mb-8">
-        <div className="flex items-center gap-4">
-          <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
-            <Activity className="w-8 h-8" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold">Mines Game Dashboard</h1>
-            <p className="text-blue-100 mt-1">Real-time monitoring & analytics</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Top Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {[
-          { 
-            title: "Active Players Now", 
-            value: stats.activePlayersNow, 
-            change: "+12%", 
-            icon: <Users className="w-7 h-7" />, 
-            bg: "from-emerald-500 to-teal-600",
-            textColor: "text-emerald-100"
-          },
-          { 
-            title: "Total Bets Today", 
-            value: `₹${stats.totalBetsToday.toLocaleString()}`, 
-            change: "+24%", 
-            icon: <CreditCard className="w-7 h-7" />, 
-            bg: "from-blue-500 to-cyan-600",
-            textColor: "text-blue-100"
-          },
-          { 
-            title: "Admin Commission", 
-            value: `₹${adminCommission.toLocaleString()}`, 
-            change: "+18%", 
-            icon: <DollarSign className="w-7 h-7" />, 
-            bg: "from-purple-500 to-violet-600",
-            textColor: "text-purple-100"
-          },
-          { 
-            title: "House Profit", 
-            value: `₹${houseProfit.toLocaleString()}`, 
-            change: "+32%", 
-            icon: <TrendingUp className="w-7 h-7" />, 
-            bg: "from-amber-500 to-orange-600",
-            textColor: "text-amber-100"
-          },
-        ].map((stat, idx) => (
-          <div
-            key={idx}
-            className={`bg-gradient-to-br ${stat.bg} p-6 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border border-white/20`}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
-                <div className="text-white">{stat.icon}</div>
-              </div>
-              <div className={`text-sm font-semibold px-2 py-1 rounded-full bg-white/20 ${stat.textColor}`}>
-                {stat.change}
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white/80">{stat.title}</p>
-              <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Win/Loss Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-green-100 p-3 rounded-xl">
-              <Trophy className="w-6 h-6 text-green-600" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Total Wins</h3>
-              <p className="text-2xl font-bold text-green-600">{stats.totalWins}</p>
-            </div>
-          </div>
-          <div className="bg-green-50 p-3 rounded-lg">
-            <p className="text-sm text-green-700">Win Rate: <span className="font-bold">{winRate}%</span></p>
-          </div>
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+            💣 Mines Game Dashboard
+          </h1>
+          <p className="text-gray-600 text-sm md:text-base">
+            Real-time monitoring & analytics
+          </p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-red-100 p-3 rounded-xl">
-              <TrendingDown className="w-6 h-6 text-red-600" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Total Losses</h3>
-              <p className="text-2xl font-bold text-red-600">{stats.totalLosses}</p>
-            </div>
+        {/* Enhanced Top Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard
+            title="Active Players Now"
+            value={stats.activePlayersNow}
+            icon={<Users className="w-5 h-5" />}
+            borderColor="border-emerald-500"
+            iconBg="bg-emerald-100"
+            iconColor="text-emerald-600"
+            trend="+12%"
+            trendUp={true}
+          />
+          
+          <StatCard
+            title="Total Bets Today"
+            value={`₹${stats.totalBetsToday.toLocaleString()}`}
+            icon={<CreditCard className="w-5 h-5" />}
+            borderColor="border-blue-500"
+            iconBg="bg-blue-100"
+            iconColor="text-blue-600"
+            trend="+24%"
+            trendUp={true}
+          />
+          
+          <StatCard
+            title="Admin Commission"
+            value={`₹${adminCommission.toLocaleString()}`}
+            icon={<DollarSign className="w-5 h-5" />}
+            borderColor="border-purple-500"
+            iconBg="bg-purple-100"
+            iconColor="text-purple-600"
+            trend="+18%"
+            trendUp={true}
+          />
+          
+          <StatCard
+            title="House Profit"
+            value={`₹${houseProfit.toLocaleString()}`}
+            icon={<TrendingUp className="w-5 h-5" />}
+            borderColor="border-orange-500"
+            iconBg="bg-orange-100"
+            iconColor="text-orange-600"
+            trend="+32%"
+            trendUp={true}
+          />
+        </div>
+
+        {/* Win/Loss Summary Cards - Fixed Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <CompactStatCard
+            title="Total Wins"
+            value={stats.totalWins}
+            icon={<Trophy className="w-5 h-5" />}
+            borderColor="border-green-500"
+            iconBg="bg-green-100"
+            iconColor="text-green-600"
+            subtitle={`Win Rate: ${winRate}%`}
+          />
+
+          <CompactStatCard
+            title="Total Losses"
+            value={stats.totalLosses}
+            icon={<TrendingDown className="w-5 h-5" />}
+            borderColor="border-red-500"
+            iconBg="bg-red-100"
+            iconColor="text-red-600"
+            subtitle={`Loss Rate: ${lossRate}%`}
+          />
+
+          <CompactStatCard
+            title="Total Games"
+            value={stats.totalGamesPlayed}
+            icon={<Target className="w-5 h-5" />}
+            borderColor="border-indigo-500"
+            iconBg="bg-indigo-100"
+            iconColor="text-indigo-600"
+            subtitle={`Commission: ${stats.commissionRate}%`}
+          />
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Main Trend Chart */}
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
+              <BarChart3 className="w-6 h-6 text-blue-600" />
+              Bets & Payouts Trend (Today)
+            </h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="time" stroke="#666" />
+                <YAxis stroke="#666" />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: '#fff',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="bets" 
+                  stackId="1" 
+                  stroke="#3B82F6" 
+                  fill="#3B82F6" 
+                  fillOpacity={0.6}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="payouts" 
+                  stackId="2" 
+                  stroke="#EF4444" 
+                  fill="#EF4444" 
+                  fillOpacity={0.6}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-          <div className="bg-red-50 p-3 rounded-lg">
-            <p className="text-sm text-red-700">Loss Rate: <span className="font-bold">{lossRate}%</span></p>
+
+          {/* Win/Loss Pie Chart */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
+              <Target className="w-6 h-6 text-purple-600" />
+              Win vs Loss Ratio
+            </h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={winLossData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                >
+                  {winLossData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-indigo-100 p-3 rounded-xl">
-              <Target className="w-6 h-6 text-indigo-600" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Total Games</h3>
-              <p className="text-2xl font-bold text-indigo-600">{stats.totalGamesPlayed}</p>
-            </div>
-          </div>
-          <div className="bg-indigo-50 p-3 rounded-lg">
-            <p className="text-sm text-indigo-700">Commission: <span className="font-bold">{stats.commissionRate}%</span></p>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Main Trend Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+        {/* Active Players Chart */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 mb-8">
           <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-            <BarChart3 className="w-6 h-6 text-blue-600" />
-            Bets & Payouts Trend (Today)
+            <Activity className="w-6 h-6 text-green-600" />
+            Active Players Throughout the Day
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={chartData}>
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="time" stroke="#666" />
               <YAxis stroke="#666" />
-              <Tooltip 
-                contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '12px',
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
-                }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="bets" 
-                stackId="1" 
-                stroke="#3B82F6" 
-                fill="#3B82F6" 
-                fillOpacity={0.6}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="payouts" 
-                stackId="2" 
-                stroke="#EF4444" 
-                fill="#EF4444" 
-                fillOpacity={0.6}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Win/Loss Pie Chart */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-          <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-            <Target className="w-6 h-6 text-purple-600" />
-            Win vs Loss Ratio
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={winLossData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                dataKey="value"
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-              >
-                {winLossData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
               <Tooltip />
-            </PieChart>
+              <Line 
+                type="monotone" 
+                dataKey="players" 
+                stroke="#10B981" 
+                strokeWidth={3}
+                dot={{ fill: '#10B981', strokeWidth: 2, r: 6 }}
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
 
-      {/* Active Players Chart */}
-      <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8">
-        <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-          <Activity className="w-6 h-6 text-green-600" />
-          Active Players Throughout the Day
-        </h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="time" stroke="#666" />
-            <YAxis stroke="#666" />
-            <Tooltip />
-            <Line 
-              type="monotone" 
-              dataKey="players" 
-              stroke="#10B981" 
-              strokeWidth={3}
-              dot={{ fill: '#10B981', strokeWidth: 2, r: 6 }}
-              activeDot={{ r: 8 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Recent Rounds Table */}
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 mb-8">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-            <Clock className="w-6 h-6 text-orange-600" />
-            Recent Rounds (Live Updates)
-          </h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr className="text-left text-gray-600 text-sm font-semibold">
-                <th className="py-4 px-6">Round ID</th>
-                <th className="py-4 px-6">Player</th>
-                <th className="py-4 px-6">Bet Amount</th>
-                <th className="py-4 px-6">Mines</th>
-                <th className="py-4 px-6">Tiles Revealed</th>
-                <th className="py-4 px-6">Result</th>
-                <th className="py-4 px-6">Payout</th>
-                <th className="py-4 px-6">Multiplier</th>
-                <th className="py-4 px-6">House P/L</th>
-                <th className="py-4 px-6">Time</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {recentRounds.map((round, idx) => (
-                <tr key={round.id} className="hover:bg-gray-50 transition-all duration-200">
-                  <td className="py-4 px-6">
-                    <span className="font-mono text-sm bg-gray-100 px-1 py-1 rounded">
-                      {round.id}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                        {round.user.charAt(0)}
-                      </div>
-                      <span className="font-medium text-gray-800">{round.user}</span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="font-semibold text-gray-800">₹{round.bet.toLocaleString()}</span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-sm font-medium">
-                      {round.mines} mines
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm font-medium">
-                      {round.tilesRevealed} tiles
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      round.result === "Win" 
-                        ? "bg-green-100 text-green-700" 
-                        : "bg-red-100 text-red-700"
-                    }`}>
-                      {round.result === "Win" ? "🎉 Win" : "💥 Loss"}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`font-bold ${
-                      round.payout > 0 ? "text-green-600" : "text-gray-500"
-                    }`}>
-                      ₹{round.payout.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`font-bold px-2 py-1 rounded ${
-                      round.result === "Win" 
-                        ? "bg-green-50 text-green-700" 
-                        : "bg-gray-100 text-gray-600"
-                    }`}>
-                      {round.multiplier}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className={`font-bold ${
-                      round.profit > 0 ? "text-green-600" : "text-red-600"
-                    }`}>
-                      {round.profit > 0 ? "+" : ""}₹{round.profit.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="text-sm text-gray-500">{round.time}</span>
-                  </td>
+        {/* Recent Rounds Table - Fixed Layout */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 mb-8">
+          <div className="p-6 border-b border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <Clock className="w-6 h-6 text-orange-600" />
+              Recent Rounds (Live Updates)
+            </h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr className="text-left text-gray-600 text-sm font-semibold">
+                  <th className="py-4 px-4 whitespace-nowrap">Round ID</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Player</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Bet Amount</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Mines</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Tiles Revealed</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Result</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Payout</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Multiplier</th>
+                  <th className="py-4 px-4 whitespace-nowrap">House P/L</th>
+                  <th className="py-4 px-4 whitespace-nowrap">Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {recentRounds.map((round, idx) => (
+                  <tr key={round.id} className="hover:bg-gray-50 transition-all duration-200">
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+                        {round.id}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                          {round.user.charAt(0)}
+                        </div>
+                        <span className="font-medium text-gray-800">{round.user}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="font-semibold text-gray-800">₹{round.bet.toLocaleString()}</span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-sm font-medium">
+                        {round.mines}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm font-medium">
+                        {round.tilesRevealed}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        round.result === "Win" 
+                          ? "bg-green-100 text-green-700" 
+                          : "bg-red-100 text-red-700"
+                      }`}>
+                        {round.result === "Win" ? "Win" : "Loss"}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className={`font-bold ${
+                        round.payout > 0 ? "text-green-600" : "text-gray-500"
+                      }`}>
+                        ₹{round.payout.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className={`font-bold px-2 py-1 rounded ${
+                        round.result === "Win" 
+                          ? "bg-green-50 text-green-700" 
+                          : "bg-gray-100 text-gray-600"
+                      }`}>
+                        {round.multiplier}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className={`font-bold ${
+                        round.profit > 0 ? "text-green-600" : "text-red-600"
+                      }`}>
+                        {round.profit > 0 ? "+" : ""}₹{round.profit.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="text-sm text-gray-500">{round.time}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      {/* Top Players */}
-      <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
-        <h3 className="text-2xl font-bold flex items-center gap-3 mb-6 text-gray-800">
-          <Crown className="w-7 h-7 text-yellow-500 animate-pulse" />
-          Top Performers (Today)
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {topPlayers.map((player, idx) => {
-            const winRate = player.games > 0 ? ((player.wins / player.games) * 100).toFixed(1) : "0";
-            const netProfit = player.totalPayout - player.totalBet;
-            
-            return (
-              <div key={player.player} className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
-                idx === 0 ? "bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-200" :
-                idx === 1 ? "bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200" :
-                idx === 2 ? "bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200" :
-                "bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200"
-              }`}>
-                <div className="flex items-center gap-2 mb-3">
-                  {idx === 0 ? <Crown className="w-5 h-5 text-yellow-500" /> :
-                   idx === 1 ? <Medal className="w-5 h-5 text-gray-500" /> :
-                   idx === 2 ? <Medal className="w-5 h-5 text-orange-500" /> :
-                   <Star className="w-4 h-4 text-blue-500" />}
-                  <span className="font-bold text-gray-800">#{idx + 1}</span>
-                </div>
-                
-                <div className="mb-3">
-                  <p className="font-semibold text-gray-800 text-sm mb-1">{player.player}</p>
-                  <p className="text-xs text-gray-600">{player.games} games played</p>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">Total Bet:</span>
-                    <span className="font-semibold">₹{player.totalBet.toLocaleString()}</span>
+        {/* Top Players */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+          <h3 className="text-2xl font-bold flex items-center gap-3 mb-6 text-gray-800">
+            <Crown className="w-7 h-7 text-yellow-500" />
+            Top Performers (Today)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {topPlayers.map((player, idx) => {
+              const winRate = player.games > 0 ? ((player.wins / player.games) * 100).toFixed(1) : "0";
+              const netProfit = player.totalPayout - player.totalBet;
+              
+              return (
+                <div key={player.player} className={`bg-white p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 shadow-sm ${
+                  idx === 0 ? "border-yellow-200" :
+                  idx === 1 ? "border-gray-200" :
+                  idx === 2 ? "border-orange-200" :
+                  "border-blue-200"
+                }`}>
+                  <div className="flex items-center gap-2 mb-3">
+                    {idx === 0 ? <Crown className="w-5 h-5 text-yellow-500" /> :
+                     idx === 1 ? <Medal className="w-5 h-5 text-gray-500" /> :
+                     idx === 2 ? <Medal className="w-5 h-5 text-orange-500" /> :
+                     <Star className="w-4 h-4 text-blue-500" />}
+                    <span className="font-bold text-gray-800">#{idx + 1}</span>
                   </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">Payout:</span>
-                    <span className="font-semibold text-green-600">₹{player.totalPayout.toLocaleString()}</span>
+                  
+                  <div className="mb-3">
+                    <p className="font-semibold text-gray-800 text-sm mb-1">{player.player}</p>
+                    <p className="text-xs text-gray-600">{player.games} games played</p>
                   </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600">Net P/L:</span>
-                    <span className={`font-bold ${netProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
-                      {netProfit >= 0 ? "+" : ""}₹{netProfit.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="mt-2">
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-gray-600">Win Rate:</span>
-                      <span className="font-semibold">{winRate}%</span>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Total Bet:</span>
+                      <span className="font-semibold">₹{player.totalBet.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full transition-all duration-500" 
-                        style={{ width: `${winRate}%` }}
-                      />
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Payout:</span>
+                      <span className="font-semibold text-green-600">₹{player.totalPayout.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Net P/L:</span>
+                      <span className={`font-bold ${netProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
+                        {netProfit >= 0 ? "+" : ""}₹{netProfit.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <div className="flex justify-between text-xs mb-1">
+                        <span className="text-gray-600">Win Rate:</span>
+                        <span className="font-semibold">{winRate}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-green-500 h-2 rounded-full transition-all duration-500" 
+                          style={{ width: `${winRate}%` }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
+
+// Reusable StatCard component (unchanged)
+function StatCard({ title, value, icon, borderColor, iconBg, iconColor, trend, trendUp, subtitle }) {
+  return (
+    <div className={`relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-t-4 ${borderColor} overflow-hidden`}>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className={`p-2 rounded-xl ${iconBg}`}>
+            <div className={iconColor}>
+              {icon}
+            </div>
+          </div>
+          
+          {trend && (
+            <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg text-xs font-semibold ${
+              trendUp 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'
+            }`}>
+              {trendUp ? (
+                <TrendingUp className="h-3 w-3" />
+              ) : (
+                <TrendingDown className="h-3 w-3" />
+              )}
+              <span>{trend}</span>
+            </div>
+          )}
+        </div>
+        
+        <div className="space-y-1">
+          <div className="text-2xl md:text-3xl font-bold text-gray-900">{value}</div>
+          <p className="text-sm text-gray-600 font-medium">{title}</p>
+          {subtitle && (
+            <p className="text-xs text-gray-500">{subtitle}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transform -translate-x-full hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"></div>
+    </div>
+  );
+}
+
+// New Compact StatCard component for Win/Loss section
+function CompactStatCard({ title, value, icon, borderColor, iconBg, iconColor, subtitle }) {
+  return (
+    <div className={`relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border-t-4 ${borderColor} overflow-hidden`}>
+      <div className="p-4">
+        <div className="flex items-center gap-3 mb-2">
+          <div className={`p-2 rounded-lg ${iconBg} flex-shrink-0`}>
+            <div className={iconColor}>
+              {icon}
+            </div>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-xl md:text-2xl font-bold text-gray-900">{value}</div>
+            <p className="text-sm text-gray-600 font-medium truncate">{title}</p>
+          </div>
+        </div>
+        {subtitle && (
+          <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+        )}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transform -translate-x-full hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"></div>
+    </div>
+  );
+}
 
 export default MinesDashboard;
