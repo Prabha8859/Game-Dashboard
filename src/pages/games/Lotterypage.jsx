@@ -207,6 +207,19 @@ const LotteryDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 font-sans p-6">
+       <div 
+          className="text-center mb-8"
+          data-aos="fade-down"
+          data-aos-duration="800"
+          data-aos-easing="ease-out"
+        >
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+            lottery Game Dashboard
+          </h1>
+          <p className="text-gray-600 text-sm md:text-base">
+            Real-time analytics and performance metrics
+          </p>
+        </div>
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
