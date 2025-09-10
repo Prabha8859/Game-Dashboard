@@ -590,7 +590,7 @@ const TeenPattiAdminDashboard = () => {
             Teen Patti Admin
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
-            Sab kuch yahan se control karein.
+            Control everything from here.
           </p>
         </header>
 
